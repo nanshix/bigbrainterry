@@ -127,6 +127,16 @@ let timerInterval = null;
 let countdownInterval = null;
 
 const leaderboardKey = `bbt-leaderboard-${quiz.id}`;
+let voiceEnabled = true;
+
+function speak(text) {
+  if (!voiceEnabled || !('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.rate = 1;
+  utterance.pitch = 1.05;
+  window.speechSynthesis.speak(utterance);
+}
 
 function resetState() {
   currentIndex = 0;
@@ -164,13 +174,16 @@ function closeQuiz() {
 function startCountdown(onComplete) {
   let remaining = 3;
   quizStage.innerHTML = `<div class="countdown">${remaining}</div>`;
+  speak(String(remaining));
   countdownInterval = setInterval(() => {
     remaining -= 1;
     if (remaining <= 0) {
       clearInterval(countdownInterval);
+      speak('Go');
       onComplete();
     } else {
       quizStage.innerHTML = `<div class="countdown">${remaining}</div>`;
+      speak(String(remaining));
     }
   }, 1000);
 }
@@ -193,6 +206,8 @@ function showQuestion() {
       <div class="options">${optionsHtml}</div>
     </div>
   `;
+
+  speak('Which flag?');
 
   const optionButtons = [...quizStage.querySelectorAll('.option-btn')];
   optionButtons.forEach((btn) => {
@@ -250,6 +265,8 @@ function showResults() {
       <button class="btn primary" id="play-again">Play Again</button>
     </div>
   `;
+
+  speak(`Score ${scoreTotal} out of ${quiz.questions.length}`);
 
   renderLeaderboard(leaderboard);
 
