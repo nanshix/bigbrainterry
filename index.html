@@ -3,30 +3,38 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Big Brain Terry — Cozy Quiz Party</title>
+    <title>Big Brain Terry</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="bg-noise"></div>
-    <header class="site-header minimal">
-      <div class="logo-wrap">
-        <img src="assets/logo.svg" alt="Big Brain Terry logo" class="logo" />
-        <h1>Big Brain Terry</h1>
+    <div id="home-screen" class="home-screen">
+      <div class="hero-bg" aria-hidden="true">
+        <div class="orb orb-a"></div>
+        <div class="orb orb-b"></div>
+        <div class="orb orb-c"></div>
+        <div class="hero-grid"></div>
       </div>
-      <div class="hero-actions">
-        <button id="start-featured" class="btn primary">Start Quiz</button>
+      <div class="hero-content">
+        <div class="brand">
+          <img src="assets/logo.svg" alt="" class="brand-logo" />
+          <div class="brand-name">
+            <span class="brand-big">Big Brain</span>
+            <span class="brand-terry">Terry</span>
+          </div>
+        </div>
+        <button id="start-btn" class="play-orb" aria-label="Start quiz">
+          <span class="play-icon">▶</span>
+        </button>
+        <div class="cat-row" id="cat-row"></div>
       </div>
-    </header>
-
-    <main>
-      <section class="section">
-        <div class="quiz-grid" id="quiz-grid"></div>
-      </section>
-    </main>
+    </div>
 
     <div id="quiz-modal" class="modal hidden" aria-hidden="true">
       <div class="modal-card" id="quiz-frame">
-        <button class="modal-close" id="close-quiz" aria-label="Close">×</button>
+        <div class="modal-topbar">
+          <button class="modal-fs" id="fullscreen-btn" aria-label="Toggle fullscreen">⛶</button>
+          <button class="modal-close" id="close-quiz" aria-label="Close">✕</button>
+        </div>
         <div id="quiz-stage"></div>
       </div>
     </div>

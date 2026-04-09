@@ -1,5 +1,13 @@
 'use strict';
 
+// ===== CATEGORIES =====
+const CATEGORIES = [
+  { id:'flags',   name:'Flag Rush',        emoji:'🏳️', desc:'50 flags · 3 difficulty tiers · 5s each', available:true },
+  { id:'crusade', name:'Crusade History',  emoji:'⚔️', desc:'Medieval warfare & history',              available:false },
+  { id:'cities',  name:'City Pictures',    emoji:'🌆', desc:'Identify famous cities from photos',       available:false },
+];
+let selectedCategory = 'flags';
+
 // ===== COUNTRY DATA =====
 const COUNTRIES = [
   // d=1 easy (well-known globally)
@@ -142,6 +150,39 @@ function playCorrect()    { [523,659,784].forEach((f,i) => setTimeout(() => beep
 function playMilestone()  { [523,659,784,1047].forEach((f,i) => setTimeout(() => beep(f,0.18,'sine',0.3), i*100)); }
 function playGameOver()   { [784,659,523,440].forEach((f,i) => setTimeout(() => beep(f,0.22,'sine',0.28), i*140)); }
 
+// ===== VOICE HOST =====
+let _voice = null;
+
+function initVoice() {
+  const voices = speechSynthesis.getVoices();
+  if (!voices.length) return;
+  const prefer = [
+    'Google UK English Female',
+    'Samantha',
+    'Karen',
+    'Moira',
+    'Tessa',
+    'Fiona',
+  ];
+  for (const name of prefer) {
+    const v = voices.find(v => v.name === name);
+    if (v) { _voice = v; return; }
+  }
+  _voice = voices.find(v => /female/i.test(v.name)) || voices[0] || null;
+}
+speechSynthesis.addEventListener('voiceschanged', initVoice);
+initVoice();
+
+function speak(text, { rate = 1, pitch = 1.1, vol = 1 } = {}) {
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  if (_voice) u.voice = _voice;
+  u.rate = rate;
+  u.pitch = pitch;
+  u.volume = vol;
+  speechSynthesis.speak(u);
+}
+
 // ===== UTILS =====
 function shuffle(arr) {
   const a = [...arr];
@@ -189,11 +230,38 @@ let timeLeft = QUESTION_TIME;
 let lastTickSec = QUESTION_TIME;
 
 // ===== DOM =====
-const quizModal   = document.getElementById('quiz-modal');
-const quizStage   = document.getElementById('quiz-stage');
+const quizModal    = document.getElementById('quiz-modal');
+const quizStage    = document.getElementById('quiz-stage');
 const closeQuizBtn = document.getElementById('close-quiz');
-const startBtn    = document.getElementById('start-featured');
-const quizGrid    = document.getElementById('quiz-grid');
+const fullscreenBtn= document.getElementById('fullscreen-btn');
+const startBtn     = document.getElementById('start-btn');
+const catRow       = document.getElementById('cat-row');
+
+// ===== CATEGORIES UI =====
+function renderCategories() {
+  catRow.innerHTML = CATEGORIES.map(cat => {
+    const active = selectedCategory === cat.id;
+    return `<span class="cat-tick${cat.available ? (active ? ' active' : '') : ' locked'}" data-cat="${cat.id}">
+      <span class="tick-box">${active ? '✓' : ''}</span>
+      <span>${cat.emoji} ${cat.name}${!cat.available ? ' · soon' : ''}</span>
+    </span>`;
+  }).join('');
+  catRow.querySelectorAll('.cat-tick:not(.locked)').forEach(el => {
+    el.addEventListener('click', () => {
+      selectedCategory = el.dataset.cat;
+      renderCategories();
+    });
+  });
+}
+
+// ===== FULLSCREEN =====
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    quizModal.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen().catch(() => {});
+  }
+}
 
 // ===== ENTRY =====
 function openQuiz() {
@@ -203,6 +271,7 @@ function openQuiz() {
 }
 function closeQuiz() {
   clearInterval(timerInterval);
+  if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   quizModal.classList.add('hidden');
   quizModal.setAttribute('aria-hidden', 'true');
 }
@@ -235,6 +304,7 @@ function doCountdown(onDone) {
 function setCountdownDisplay(num, label) {
   quizStage.innerHTML = `
     <div class="countdown-screen">
+      <div class="game-bg strong"></div>
       <div class="countdown-num">${num}</div>
       ${label ? `<div class="countdown-label">${label}</div>` : ''}
     </div>`;
@@ -271,6 +341,7 @@ function showQuestion() {
 
   quizStage.innerHTML = `
     <div class="game-screen">
+      <div class="game-bg"></div>
       <div class="game-hud">
         <span class="hud-q">Q ${n} / ${ROUND_SIZE}</span>
         <div class="hud-timer">
@@ -363,6 +434,7 @@ function showMilestone(m) {
   playMilestone();
   quizStage.innerHTML = `
     <div class="milestone-screen">
+      <div class="game-bg strong"></div>
       <div class="milestone-headline">${m.headline}</div>
       <div class="milestone-sub">${m.sub}</div>
     </div>`;
@@ -383,6 +455,7 @@ function showResults() {
   const rank = getRank(score);
   quizStage.innerHTML = `
     <div class="result-screen">
+      <div class="game-bg strong"></div>
       <div class="result-title">Round Complete!</div>
       <div class="result-score">${score}<span class="result-total"> / ${ROUND_SIZE}</span></div>
       <div class="result-rank" style="color:${rank.color}">${rank.label}</div>
@@ -392,16 +465,15 @@ function showResults() {
 }
 
 // ===== INIT =====
+renderCategories();
 closeQuizBtn.addEventListener('click', closeQuiz);
 startBtn.addEventListener('click', openQuiz);
+fullscreenBtn.addEventListener('click', toggleFullscreen);
 
-// Simple flavor card in the grid
-if (quizGrid) {
-  quizGrid.innerHTML = `
-    <div class="quiz-card">
-      <h3>Flag Rush</h3>
-      <p>50 questions &mdash; 3 difficulty tiers &mdash; 5 seconds per flag</p>
-      <button class="btn primary" id="grid-play">Play Now</button>
-    </div>`;
-  document.getElementById('grid-play').addEventListener('click', openQuiz);
-}
+document.addEventListener('keydown', e => {
+  if (quizModal.classList.contains('hidden')) {
+    if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); openQuiz(); }
+  } else if (e.key === 'Escape') {
+    closeQuiz();
+  }
+});
