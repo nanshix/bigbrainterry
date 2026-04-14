@@ -650,8 +650,86 @@ function doReveal(selectedIdx) {
 
   if (correct) gameTimeout(() => highlightCountry(q.country.code), 300);
 
+  // Flag flies to map on every reveal so player always sees where the country is
+  gameTimeout(() => flyFlagToMap(q.country), 350);
+
   // Advance only after speech finishes AND minimum display time has passed
   speakThenAdvance(revealText, revealOpts, REVEAL_TIME, advanceGame);
+}
+
+// ===== FLY FLAG TO MAP =====
+function flyFlagToMap(country) {
+  const modal = document.getElementById('quiz-frame');
+  if (!modal) return;
+  const coords = getCountryCoords(country.code);
+  if (!coords) return;
+
+  const modalRect = modal.getBoundingClientRect();
+
+  // Source: correct flag card, or mystery flag, or scroll centre as fallback
+  const srcEl = document.querySelector('.flag-choice.correct .choice-flag')
+             || document.querySelector('.mystery-flag')
+             || document.querySelector('.scroll-body');
+  if (!srcEl) return;
+
+  const srcRect = srcEl.getBoundingClientRect();
+  const srcX = srcRect.left - modalRect.left + srcRect.width  / 2;
+  const srcY = srcRect.top  - modalRect.top  + srcRect.height / 2;
+  const flagW = Math.min(srcRect.width * 0.8, 72);
+
+  // Destination on map
+  const dstX = (coords[0] / 1000) * modalRect.width;
+  const dstY = (coords[1] / 500)  * modalRect.height;
+
+  // Arc peak — rise proportional to distance, capped
+  const dist = Math.hypot(dstX - srcX, dstY - srcY);
+  const arcH = Math.min(dist * 0.45, modalRect.height * 0.35);
+  const midX = (srcX + dstX) / 2;
+  const midY = Math.min(srcY, dstY) - arcH;
+
+  // Roll the scroll away so the map is visible when the flag lands
+  const scrollWrap = document.querySelector('.scroll-wrap');
+  if (scrollWrap) {
+    scrollWrap.classList.add('scroll-fly-out');
+  }
+
+  // Build element
+  const el = document.createElement('div');
+  el.style.cssText = `
+    position:absolute; left:0; top:0; pointer-events:none; z-index:50;
+    transform-origin:center center;
+    transform:translate(${srcX}px,${srcY}px) translate(-50%,-50%);
+  `;
+  el.innerHTML = `<img src="${flagUrl(country.code)}" data-code="${country.code}"
+    style="width:${flagW}px; aspect-ratio:5/3; object-fit:${country.code==='np'?'contain':'cover'};
+    border-radius:4px; box-shadow:0 6px 20px rgba(0,0,0,0.55); display:block;" />`;
+  modal.appendChild(el);
+
+  // Three-keyframe arc using Web Animations API
+  el.animate([
+    {
+      transform: `translate(${srcX}px, ${srcY}px) translate(-50%,-50%) rotate(-8deg) scale(1)`,
+      opacity: 0.95
+    },
+    {
+      transform: `translate(${midX}px, ${midY}px) translate(-50%,-50%) rotate(10deg) scale(0.75)`,
+      opacity: 1,
+      offset: 0.42
+    },
+    {
+      transform: `translate(${dstX}px, ${dstY}px) translate(-50%,-50%) rotate(0deg) scale(0.22)`,
+      opacity: 0.9
+    }
+  ], {
+    duration: 1100,
+    easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    fill: 'forwards'
+  }).onfinish = () => {
+    // Planted: linger briefly then fade out
+    el.animate([{ opacity: 0.9 }, { opacity: 0 }], {
+      duration: 500, delay: 700, fill: 'forwards'
+    }).onfinish = () => el.remove();
+  };
 }
 
 // ===== COUNTRY MAP HIGHLIGHT =====

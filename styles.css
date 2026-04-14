@@ -412,6 +412,12 @@ body {
   align-items: center; justify-content: stretch;
   position: relative; z-index: 2;
   padding: 0.3rem clamp(0.5rem, 3vw, 2rem) 0.5rem;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.8, 0.6), opacity 0.4s ease;
+}
+.scroll-wrap.scroll-fly-out {
+  transform: translateY(110%) scale(0.92);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .scroll-body {
