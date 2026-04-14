@@ -7,6 +7,7 @@ const CATEGORIES = [
   { id:'cities',  name:'City Pictures',    emoji:'🌆', desc:'Identify famous cities from photos',       available:false },
 ];
 let selectedCategory = 'flags';
+let shuffleMode = true;
 
 // ===== COUNTRY DATA =====
 const COUNTRIES = [
@@ -252,7 +253,7 @@ const catRow       = document.getElementById('cat-row');
 // ===== CATEGORIES UI =====
 function renderCategories() {
   catRow.innerHTML = CATEGORIES.map(cat => {
-    const active = selectedCategory === cat.id;
+    const active = !shuffleMode && selectedCategory === cat.id;
     const cls = ['cat-icon',
       cat.available ? (active ? 'active' : '') : 'locked'
     ].filter(Boolean).join(' ');
@@ -264,12 +265,22 @@ function renderCategories() {
       <span class="cat-tooltip">${tooltip}</span>
     </button>`;
   }).join('');
+
+  catRow.classList.toggle('shuffle-on', shuffleMode);
+
   catRow.querySelectorAll('.cat-icon:not(.locked)').forEach(el => {
     el.addEventListener('click', () => {
+      if (shuffleMode) return;
       selectedCategory = el.dataset.cat;
       renderCategories();
     });
   });
+}
+
+function renderShuffle() {
+  const btn = document.getElementById('shuffle-btn');
+  if (btn) btn.classList.toggle('active', shuffleMode);
+  renderCategories();
 }
 
 // ===== FULLSCREEN (home screen only) =====
@@ -283,6 +294,10 @@ function toggleFullscreen() {
 
 // ===== ENTRY =====
 function openQuiz() {
+  if (shuffleMode) {
+    const available = CATEGORIES.filter(c => c.available);
+    selectedCategory = available[Math.floor(Math.random() * available.length)].id;
+  }
   quizModal.classList.remove('hidden');
   quizModal.setAttribute('aria-hidden', 'false');
   startGame();
@@ -312,39 +327,23 @@ function startGame() {
 }
 
 // ===== COUNTDOWN =====
-const SPEAK_LEAD = 400; // ms to fire speech before display changes
-
 function doCountdown(onDone) {
   let n = 5;
-  setCountdownDisplay(n, 'Get Ready!');
-  speak('Get ready!', { interrupt: true });
 
-  // Speech fires SPEAK_LEAD ms before each display change
-  let speechStep = n;
-  function fireSpeech() {
-    speechStep--;
-    if (speechStep > 0) {
+  function step() {
+    if (n > 0) {
+      setCountdownDisplay(n, n === 5 ? 'Get Ready!' : '');
       playTick();
-      speak(String(speechStep), { interrupt: true });
-      gameTimeout(fireSpeech, 1000);
+      const text = n === 5 ? 'Get ready' : String(n);
+      speakThenAdvance(text, { interrupt: true }, 1000, () => { n--; step(); });
     } else {
+      setCountdownDisplay('GO!', '');
       playMilestone();
-      speak('Go!', { rate: 1.1, pitch: 1.2, interrupt: true });
+      speakThenAdvance('Go!', { rate: 1.1, pitch: 1.2, interrupt: true }, 700, onDone);
     }
   }
-  gameTimeout(fireSpeech, 1000 - SPEAK_LEAD); // first fires at 600ms
 
-  // Display changes every 1000ms
-  const t = setInterval(() => {
-    n--;
-    if (n <= 0) {
-      clearInterval(t);
-      setCountdownDisplay('GO!', '');
-      gameTimeout(onDone, 900);
-    } else {
-      setCountdownDisplay(n, '');
-    }
-  }, 1000);
+  step();
 }
 
 function setCountdownDisplay(num, label) {
@@ -387,7 +386,7 @@ function showQuestion() {
         ${q.choices.map((c, i) => `
           <button class="flag-choice" data-idx="${i}" data-throw="${THROW_DIRS[i]}">
             <span class="choice-badge">${labels[i]}</span>
-            <img src="${flagUrl(c.code)}" alt="Flag" class="choice-flag" />
+            <img src="${flagUrl(c.code)}" alt="Flag" class="choice-flag" data-code="${c.code}" />
           </button>`).join('')}
       </div>`
     : `<div class="name-choices">
@@ -416,7 +415,7 @@ function showQuestion() {
     : `<div class="q-header q-header--flag">
          <div class="q-label">Which country does this flag belong to?</div>
          <div class="mystery-wrap">
-           <img src="${flagUrl(q.country.code)}" alt="Mystery flag" class="mystery-flag" />
+           <img src="${flagUrl(q.country.code)}" alt="Mystery flag" class="mystery-flag" data-code="${q.country.code}" />
          </div>
        </div>`;
 
@@ -775,6 +774,10 @@ function showResults() {
 renderCategories();
 startBtn.addEventListener('click', openQuiz);
 fullscreenBtn.addEventListener('click', toggleFullscreen);
+document.getElementById('shuffle-btn').addEventListener('click', () => {
+  shuffleMode = !shuffleMode;
+  renderShuffle();
+});
 
 document.addEventListener('keydown', e => {
   if (quizModal.classList.contains('hidden')) {
