@@ -173,8 +173,8 @@ function initVoice() {
 speechSynthesis.addEventListener('voiceschanged', initVoice);
 initVoice();
 
-function speak(text, { rate = 1, pitch = 1.1, vol = 1 } = {}) {
-  speechSynthesis.cancel();
+function speak(text, { rate = 1, pitch = 1.1, vol = 1, interrupt = false } = {}) {
+  if (interrupt) speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   if (_voice) u.voice = _voice;
   u.rate = rate;
@@ -271,6 +271,7 @@ function openQuiz() {
 }
 function closeQuiz() {
   clearInterval(timerInterval);
+  speechSynthesis.cancel();
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   quizModal.classList.add('hidden');
   quizModal.setAttribute('aria-hidden', 'true');
@@ -288,15 +289,18 @@ function startGame() {
 function doCountdown(onDone) {
   let n = 3;
   setCountdownDisplay(n, 'Get Ready!');
+  speak('Get ready!');
   const t = setInterval(() => {
     n--;
     if (n <= 0) {
       clearInterval(t);
       setCountdownDisplay('GO!', '');
       playMilestone();
+      speak('Go!', { rate: 1.1, pitch: 1.2 });
       setTimeout(onDone, 700);
     } else {
       playTick();
+      speak(String(n));
       setCountdownDisplay(n, '');
     }
   }, 1000);
@@ -310,6 +314,19 @@ function setCountdownDisplay(num, label) {
     </div>`;
 }
 
+// ===== COMPASS ROSE SVG (inline, for scroll corners) =====
+const COMPASS_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="#5c3a1e">
+  <polygon points="32,4 36,28 32,32 28,28" opacity="0.9"/>
+  <polygon points="60,32 36,36 32,32 36,28" opacity="0.7"/>
+  <polygon points="32,60 28,36 32,32 36,36" opacity="0.9"/>
+  <polygon points="4,32 28,28 32,32 28,36" opacity="0.7"/>
+  <circle cx="32" cy="32" r="5" fill="none" stroke="#5c3a1e" stroke-width="1.5"/>
+  <circle cx="32" cy="32" r="2" opacity="0.8"/>
+</svg>`;
+
+// Throw directions mapped to corner positions
+const THROW_DIRS = ['tl','tr','bl','br'];
+
 // ===== SHOW QUESTION =====
 function showQuestion() {
   const q = round[currentIdx];
@@ -319,7 +336,7 @@ function showQuestion() {
   const choicesHtml = q.type === 'country-to-flag'
     ? `<div class="flag-choices">
         ${q.choices.map((c, i) => `
-          <button class="flag-choice" data-idx="${i}">
+          <button class="flag-choice" data-idx="${i}" data-throw="${THROW_DIRS[i]}">
             <span class="choice-badge">${labels[i]}</span>
             <img src="${flagUrl(c.code)}" alt="Flag" class="choice-flag" />
           </button>`).join('')}
@@ -331,6 +348,16 @@ function showQuestion() {
             <span class="choice-name">${c.name}</span>
           </button>`).join('')}
       </div>`;
+
+  const promptText = q.type === 'country-to-flag'
+    ? `Which flag is ${q.country.name}?`
+    : `Which country does this flag belong to?`;
+
+  const scrollCorners = `
+    <span class="scroll-corner tl">${COMPASS_SVG}</span>
+    <span class="scroll-corner tr">${COMPASS_SVG}</span>
+    <span class="scroll-corner bl">${COMPASS_SVG}</span>
+    <span class="scroll-corner br">${COMPASS_SVG}</span>`;
 
   const promptHtml = q.type === 'country-to-flag'
     ? `<div class="q-prompt">Which flag is <strong>${q.country.name}</strong>?</div>`
@@ -350,8 +377,13 @@ function showQuestion() {
         <span class="hud-score">${score} pts</span>
       </div>
       <div class="timer-bar"><div class="timer-fill" id="timer-fill"></div></div>
-      ${promptHtml}
-      ${choicesHtml}
+      <div class="scroll-wrap">
+        <div class="scroll-body">
+          ${scrollCorners}
+          ${promptHtml}
+          ${choicesHtml}
+        </div>
+      </div>
     </div>`;
 
   document.querySelectorAll('[data-idx]').forEach(btn => {
@@ -361,6 +393,7 @@ function showQuestion() {
     });
   });
 
+  speak(promptText, { rate: 1.05, interrupt: true });
   startTimer();
 }
 
@@ -400,16 +433,34 @@ function doReveal(selectedIdx) {
   const q = round[currentIdx];
   const correct = selectedIdx === q.correctIdx;
 
-  if (correct) { score++; playCorrect(); }
-  else { playReveal(); }
+  if (correct) { score++; playCorrect(); speak('Correct!', { pitch: 1.2, interrupt: true }); }
+  else { playReveal(); speak('The answer was ' + q.country.name, { interrupt: true }); }
 
   const btns = document.querySelectorAll('[data-idx]');
   btns.forEach(btn => {
     btn.disabled = true;
     const i = Number(btn.dataset.idx);
-    if (i === q.correctIdx) btn.classList.add('correct');
-    else if (i === selectedIdx) btn.classList.add('wrong');
-    // On flag choices: reveal country name below flag after answer
+    const throwDir = btn.dataset.throw;
+
+    if (i === q.correctIdx) {
+      btn.classList.add('correct');
+      // Flag question: zoom the correct card, throw others out
+      if (q.type === 'country-to-flag') {
+        btn.classList.add('correct-keep');
+      }
+    } else if (i === selectedIdx) {
+      btn.classList.add('wrong');
+    }
+
+    // Throw out all non-correct flags
+    if (q.type === 'country-to-flag' && i !== q.correctIdx) {
+      // Small delay so user sees them momentarily before they fly off
+      setTimeout(() => {
+        btn.classList.add(`throw-out-${throwDir || 'tl'}`);
+      }, 220);
+    }
+
+    // On flag choices: reveal country name in badge after answer
     if (q.type === 'country-to-flag') {
       const badge = btn.querySelector('.choice-badge');
       if (badge) badge.textContent = q.choices[i].name.length > 10
@@ -418,7 +469,83 @@ function doReveal(selectedIdx) {
     }
   });
 
+  // Highlight country on map if correct
+  if (correct) {
+    setTimeout(() => highlightCountry(q.country.code), 300);
+  }
+
   setTimeout(advanceGame, REVEAL_TIME);
+}
+
+// ===== COUNTRY MAP HIGHLIGHT =====
+function highlightCountry(code) {
+  const svg = document.getElementById('map-highlight-svg');
+  if (!svg) return;
+  // We use a simple marker circle since we don't have a full country SVG paths overlay.
+  // A pulsing ring effect over the approximate country location.
+  // Country coordinate lookup (approximate map positions in 0-1000 x 0-500 space)
+  const coords = getCountryCoords(code);
+  if (!coords) return;
+
+  const id = 'flash-' + code;
+  // Remove any previous
+  const prev = svg.getElementById(id);
+  if (prev) prev.remove();
+
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.id = id;
+  g.innerHTML = `
+    <circle cx="${coords[0]}" cy="${coords[1]}" r="14" fill="#ffd600" opacity="0" class="country-flash"/>
+    <circle cx="${coords[0]}" cy="${coords[1]}" r="18" fill="none" stroke="#ffd600" stroke-width="2" opacity="0" class="country-flash" style="animation-delay:0.1s"/>
+  `;
+  svg.appendChild(g);
+  setTimeout(() => { if (g.parentNode) g.remove(); }, 2000);
+}
+
+// Approximate country center coordinates in a 1000×500 equirectangular projection
+function getCountryCoords(code) {
+  const map = {
+    us:[220,170], gb:[470,130], fr:[480,155], de:[498,140], it:[510,165],
+    es:[462,167], jp:[795,165], cn:[715,175], br:[285,295], ca:[195,130],
+    au:[760,340], mx:[185,210], in:[655,215], ru:[620,120], kr:[785,175],
+    ng:[490,270], za:[520,380], eg:[540,205], ar:[265,355], tr:[560,175],
+    se:[510,110], no:[495,105], dk:[495,120], fi:[525,105], ch:[490,150],
+    nl:[482,135], be:[482,140], pl:[515,135], pt:[455,170], gr:[530,175],
+    ua:[545,145], th:[715,240], vn:[735,245], id:[745,300], my:[728,278],
+    ph:[768,250], sg:[730,282], nz:[840,390], sa:[590,225], ae:[608,232],
+    il:[553,198], ir:[610,200], pk:[640,205], bd:[678,215], ke:[555,290],
+    gh:[465,270], ma:[455,188], cu:[225,228], ie:[455,130], et:[563,275],
+    at:[505,148], hu:[518,148], cz:[505,140], sk:[520,142], ro:[530,155],
+    bg:[533,160], rs:[523,157], hr:[512,155], si:[505,152], ba:[515,158],
+    mk:[527,163], al:[522,168], me:[518,162], lt:[527,127], lv:[527,120],
+    ee:[527,113], by:[533,133], md:[538,152], az:[590,178], ge:[580,173],
+    am:[578,177], kz:[635,148], uz:[640,185], tm:[628,190], af:[638,198],
+    np:[672,208], lk:[668,250], mm:[710,228], kh:[725,252], la:[720,242],
+    mn:[715,148], kp:[783,168], co:[248,268], ve:[265,255], cl:[252,348],
+    pe:[246,300], ec:[238,280], bo:[263,318], py:[275,335], uy:[280,348],
+    gt:[193,235], hn:[200,238], sv:[197,240], ni:[205,245], cr:[210,250],
+    pa:[218,255], do:[248,230], ht:[243,233], jm:[233,235], tt:[270,258],
+    cy:[548,190], mt:[502,175], lu:[487,143], is:[440,100], dz:[482,200],
+    ly:[510,200], tn:[495,185], sd:[543,255], so:[575,275], ug:[543,285],
+    zw:[535,355], mz:[548,345], ao:[510,320], cm:[500,270], sn:[442,250],
+    ml:[462,240], ci:[462,268], iq:[578,197], sy:[562,190], jo:[557,203],
+    lb:[555,193], kw:[590,212], qa:[598,228], bh:[597,225], om:[615,238],
+    ye:[590,248], zm:[535,330], rw:[540,293], tz:[548,305], kg:[660,177],
+    tj:[653,185], bt:[682,208], mv:[655,270], bn:[742,268], tl:[778,308],
+    pg:[808,295], fj:[878,328], ws:[900,330], to:[895,338], vu:[860,325],
+    sb:[840,305], ki:[880,270], tv:[890,305], nr:[876,285], mh:[866,268],
+    fm:[828,262], pw:[790,268], ad:[475,162], mc:[488,160], sm:[506,158],
+    li:[493,148], xk:[523,163], bz:[200,232], bb:[278,250], bs:[232,220],
+    gd:[268,256], ag:[268,238], kn:[263,235], dm:[265,245], lc:[267,248],
+    vc:[267,252], sr:[277,270], gy:[270,268], ne:[490,248], td:[510,252],
+    bf:[468,255], gn:[450,260], gw:[445,258], sl:[448,265], lr:[453,268],
+    tg:[473,265], bj:[475,262], cf:[518,268], ss:[545,268], er:[558,258],
+    dj:[568,268], bi:[540,298], mw:[548,325], bw:[525,360], na:[510,348],
+    ls:[528,372], sz:[535,368], mg:[568,340], mu:[600,348], km:[570,320],
+    cv:[432,248], st:[490,282], gq:[495,278], ga:[500,285], cg:[507,295],
+    cd:[525,295], mr:[447,228], gm:[440,255],
+  };
+  return map[code.toLowerCase()] || null;
 }
 
 // ===== ADVANCE =====
@@ -432,6 +559,7 @@ function advanceGame() {
 
 function showMilestone(m) {
   playMilestone();
+  speak(m.headline + '. ' + m.sub, { rate: 0.95, interrupt: true });
   quizStage.innerHTML = `
     <div class="milestone-screen">
       <div class="game-bg strong"></div>
@@ -453,6 +581,7 @@ function getRank(s) {
 function showResults() {
   playGameOver();
   const rank = getRank(score);
+  speak(`Round complete! You scored ${score} out of ${ROUND_SIZE}. ${rank.label}!`, { rate: 0.95, interrupt: true });
   quizStage.innerHTML = `
     <div class="result-screen">
       <div class="game-bg strong"></div>

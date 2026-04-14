@@ -31,6 +31,12 @@
 
     <div id="quiz-modal" class="modal hidden" aria-hidden="true">
       <div class="modal-card" id="quiz-frame">
+        <!-- World map background -->
+        <div class="map-bg" aria-hidden="true">
+          <img src="assets/worldmap169.png" alt="" class="map-img" />
+        </div>
+        <!-- SVG country highlight overlay (paths added dynamically) -->
+        <svg id="map-highlight-svg" class="map-highlight-svg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
         <div class="modal-topbar">
           <button class="modal-fs" id="fullscreen-btn" aria-label="Toggle fullscreen">⛶</button>
           <button class="modal-close" id="close-quiz" aria-label="Close">✕</button>
