@@ -481,13 +481,144 @@ function startTimer() {
   }, 100);
 }
 
+// ===== REVEAL PHRASES =====
+const REVEAL_PHRASES = {
+  // A
+  us: "Home of the brave, land of the free! That's the United States!",
+  gb: "God save the King! That's the United Kingdom!",
+  fr: "Home of the Eiffel Tower! That's France!",
+  de: "Land of poets and thinkers! That's Germany!",
+  it: "Pizza, pasta, la dolce vita! That's Italy!",
+  es: "Ole! Home of flamenco! That's Spain!",
+  jp: "Land of the Rising Sun! That's Japan!",
+  cn: "Home of the Great Dragon! That's China!",
+  br: "Carnival time! That's Brazil!",
+  ca: "Oh Canada! That's right, that's Canada!",
+  au: "G'day mate! That's Australia!",
+  mx: "Viva Mexico!",
+  in: "Land of a billion stories! That's India!",
+  ru: "From the tundra to the taiga! That's Russia!",
+  kr: "Land of the Morning Calm! That's South Korea!",
+  ng: "Giant of Africa! That's Nigeria!",
+  za: "The Rainbow Nation! That's South Africa!",
+  eg: "Land of the Pharaohs! That's Egypt!",
+  ar: "Tango anyone? That's Argentina!",
+  tr: "Where East meets West! That's Turkey!",
+  se: "Land of ABBA and IKEA! That's Sweden!",
+  no: "Land of the Midnight Sun! That's Norway!",
+  dk: "Home of the happiest people! That's Denmark!",
+  fi: "Sauna capital of the world! That's Finland!",
+  ch: "Mountains, chocolate, and cheese! That's Switzerland!",
+  nl: "Tulips and windmills! That's the Netherlands!",
+  be: "Chocolate and waffles! That's Belgium!",
+  pl: "The White Eagle soars! That's Poland!",
+  pt: "Explorers of the seven seas! That's Portugal!",
+  gr: "Birthplace of democracy! That's Greece!",
+  ua: "Golden wheat and blue skies! That's Ukraine!",
+  th: "Land of Smiles! That's Thailand!",
+  vn: "Land of the Ascending Dragon! That's Vietnam!",
+  id: "Seventeen thousand islands! That's Indonesia!",
+  my: "Truly Asia! That's Malaysia!",
+  ph: "Pearl of the Orient! That's the Philippines!",
+  sg: "The Lion City! That's Singapore!",
+  nz: "Land of the Long White Cloud! That's New Zealand!",
+  sa: "Kingdom of the desert! That's Saudi Arabia!",
+  ae: "City of gold in the sands! That's the UAE!",
+  il: "Land of milk and honey! That's Israel!",
+  ir: "Ancient Persia lives on! That's Iran!",
+  pk: "Star and crescent! That's Pakistan!",
+  bd: "Rising sun of Bengal! That's Bangladesh!",
+  ke: "Safari country! That's Kenya!",
+  gh: "Black Star of Africa! That's Ghana!",
+  ma: "Gateway to Africa! That's Morocco!",
+  cu: "Sugar, salsa, and revolution! That's Cuba!",
+  ie: "Forty shades of green! That's Ireland!",
+  et: "One of the oldest civilisations! That's Ethiopia!",
+  // Medium
+  at: "Home of Mozart and Beethoven! That's Austria!",
+  hu: "Land of paprika and thermal baths! That's Hungary!",
+  cz: "City of a hundred spires! That's Czech Republic!",
+  sk: "Castles in the Carpathians! That's Slovakia!",
+  ro: "Land of Dracula's castle! That's Romania!",
+  bg: "Land of roses! That's Bulgaria!",
+  rs: "Land of rivers and mountains! That's Serbia!",
+  hr: "Pearl of the Adriatic! That's Croatia!",
+  lt: "Land of amber! That's Lithuania!",
+  lv: "Land of song! That's Latvia!",
+  ee: "The Digital Republic! That's Estonia!",
+  by: "Land of storks and potatoes! That's Belarus!",
+  az: "Land of fire! That's Azerbaijan!",
+  ge: "Ancient land of wine! That's Georgia!",
+  am: "First Christian nation in the world! That's Armenia!",
+  kz: "Vast steppe and eagle hunters! That's Kazakhstan!",
+  uz: "Silk Road treasure! That's Uzbekistan!",
+  af: "Crossroads of civilisations! That's Afghanistan!",
+  np: "Home of Everest! That's Nepal!",
+  lk: "Teardrop of India! That's Sri Lanka!",
+  mm: "Land of golden pagodas! That's Myanmar!",
+  kh: "Home of Angkor Wat! That's Cambodia!",
+  mn: "Land of Genghis Khan! That's Mongolia!",
+  kp: "The Hermit Kingdom! That's North Korea!",
+  co: "Land of magical realism! That's Colombia!",
+  ve: "Land of Angel Falls! That's Venezuela!",
+  cl: "Longest country in the world! That's Chile!",
+  pe: "Home of Machu Picchu! That's Peru!",
+  ec: "Named after the equator! That's Ecuador!",
+  bo: "Land of salt flats! That's Bolivia!",
+  uy: "Little Switzerland of South America! That's Uruguay!",
+  gt: "Land of eternal spring! That's Guatemala!",
+  cr: "Pura vida! That's Costa Rica!",
+  pa: "Where two oceans meet! That's Panama!",
+  do: "First European settlement in the Americas! That's the Dominican Republic!",
+  jm: "One love! That's Jamaica!",
+  cy: "Island of love and Aphrodite! That's Cyprus!",
+  is: "Land of fire and ice! That's Iceland!",
+  dz: "Largest country in Africa! That's Algeria!",
+  so: "Horn of Africa! That's Somalia!",
+  iq: "Cradle of civilisation! That's Iraq!",
+  sy: "Ancient city of Damascus! That's Syria!",
+  jo: "Rose-red city, half as old as time! That's Jordan!",
+  qa: "Falcon in the desert! That's Qatar!",
+  ye: "Arabia Felix, the happy land! That's Yemen!",
+  // Hard
+  bt: "Kingdom of happiness! That's Bhutan! The dragon flag!",
+  mv: "Paradise of a thousand islands! That's Maldives!",
+  bn: "The Abode of Peace! That's Brunei!",
+  pg: "Land of the unexpected! That's Papua New Guinea!",
+  fj: "Where the world begins each morning! That's Fiji!",
+  ad: "Tiny country, big mountains! That's Andorra!",
+  mc: "Glamour on the Riviera! That's Monaco!",
+  sm: "Oldest republic in the world! That's San Marino!",
+  li: "Rhine valley gem! That's Liechtenstein!",
+  bz: "Jaguar country! That's Belize!",
+  sr: "The wild Amazonian heart! That's Suriname!",
+  mg: "The great red island! That's Madagascar!",
+  cv: "Islands of music and saudade! That's Cape Verde!",
+  cd: "Heart of the Congo! That's DR Congo!",
+  mr: "Desert meets ocean! That's Mauritania!",
+};
+
+const GENERIC_REVEALS = [
+  n => `Ooh, that one was sneaky! The answer is ${n}!`,
+  n => `Don't worry, now you know! That flag belongs to ${n}!`,
+  n => `${n} takes it! File that one away!`,
+  n => `Tricky! That was ${n}!`,
+  n => `The flag of ${n}! Now you'll never forget it!`,
+  n => `That's ${n}! A tough one!`,
+];
+
+function getRevealPhrase(country) {
+  return REVEAL_PHRASES[country.code.toLowerCase()]
+    || GENERIC_REVEALS[Math.floor(Math.random() * GENERIC_REVEALS.length)](country.name);
+}
+
 // ===== REVEAL =====
 function doReveal(selectedIdx) {
   clearInterval(timerInterval);
   const q = round[currentIdx];
   const correct = selectedIdx === q.correctIdx;
 
-  const revealText = correct ? 'Correct!' : 'The answer was ' + q.country.name;
+  const revealText = correct ? 'Correct!' : getRevealPhrase(q.country);
   const revealOpts = correct ? { pitch: 1.2, interrupt: true } : { interrupt: true };
   if (correct) playCorrect(); else playReveal();
 
