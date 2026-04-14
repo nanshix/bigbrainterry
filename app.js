@@ -173,14 +173,26 @@ function initVoice() {
 speechSynthesis.addEventListener('voiceschanged', initVoice);
 initVoice();
 
-function speak(text, { rate = 1, pitch = 1.1, vol = 1, interrupt = false } = {}) {
+function speak(text, { rate = 1, pitch = 1.1, vol = 1, interrupt = false, onend = null } = {}) {
   if (interrupt) speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
   if (_voice) u.voice = _voice;
   u.rate = rate;
   u.pitch = pitch;
   u.volume = vol;
+  if (onend) u.onend = onend;
   speechSynthesis.speak(u);
+}
+
+// Advance only after BOTH minMs have elapsed AND speech has finished
+function speakThenAdvance(text, opts, minMs, callback) {
+  let speechDone = false;
+  let timerDone = false;
+  function maybeGo() {
+    if (speechDone && timerDone) callback();
+  }
+  speak(text, { ...opts, onend: () => { speechDone = true; maybeGo(); } });
+  gameTimeout(() => { timerDone = true; maybeGo(); }, minMs);
 }
 
 // ===== UTILS =====
@@ -228,11 +240,11 @@ let score = 0;
 let timerInterval = null;
 let timeLeft = QUESTION_TIME;
 let lastTickSec = QUESTION_TIME;
+let pendingTimeouts = [];
 
 // ===== DOM =====
 const quizModal    = document.getElementById('quiz-modal');
 const quizStage    = document.getElementById('quiz-stage');
-const closeQuizBtn = document.getElementById('close-quiz');
 const fullscreenBtn= document.getElementById('fullscreen-btn');
 const startBtn     = document.getElementById('start-btn');
 const catRow       = document.getElementById('cat-row');
@@ -241,12 +253,18 @@ const catRow       = document.getElementById('cat-row');
 function renderCategories() {
   catRow.innerHTML = CATEGORIES.map(cat => {
     const active = selectedCategory === cat.id;
-    return `<span class="cat-tick${cat.available ? (active ? ' active' : '') : ' locked'}" data-cat="${cat.id}">
-      <span class="tick-box">${active ? '✓' : ''}</span>
-      <span>${cat.emoji} ${cat.name}${!cat.available ? ' · soon' : ''}</span>
-    </span>`;
+    const cls = ['cat-icon',
+      cat.available ? (active ? 'active' : '') : 'locked'
+    ].filter(Boolean).join(' ');
+    const tooltip = cat.available
+      ? `${cat.name} — ${cat.desc}`
+      : `${cat.name} — coming soon`;
+    return `<button class="${cls}" data-cat="${cat.id}" aria-label="${tooltip}" ${!cat.available ? 'disabled' : ''}>
+      <span class="cat-emoji">${cat.emoji}</span>
+      <span class="cat-tooltip">${tooltip}</span>
+    </button>`;
   }).join('');
-  catRow.querySelectorAll('.cat-tick:not(.locked)').forEach(el => {
+  catRow.querySelectorAll('.cat-icon:not(.locked)').forEach(el => {
     el.addEventListener('click', () => {
       selectedCategory = el.dataset.cat;
       renderCategories();
@@ -254,10 +272,10 @@ function renderCategories() {
   });
 }
 
-// ===== FULLSCREEN =====
+// ===== FULLSCREEN (home screen only) =====
 function toggleFullscreen() {
   if (!document.fullscreenElement) {
-    quizModal.requestFullscreen().catch(() => {});
+    document.documentElement.requestFullscreen().catch(() => {});
   } else {
     document.exitFullscreen().catch(() => {});
   }
@@ -269,8 +287,16 @@ function openQuiz() {
   quizModal.setAttribute('aria-hidden', 'false');
   startGame();
 }
+function gameTimeout(fn, ms) {
+  const id = setTimeout(fn, ms);
+  pendingTimeouts.push(id);
+  return id;
+}
+
 function closeQuiz() {
   clearInterval(timerInterval);
+  pendingTimeouts.forEach(clearTimeout);
+  pendingTimeouts = [];
   speechSynthesis.cancel();
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   quizModal.classList.add('hidden');
@@ -286,30 +312,53 @@ function startGame() {
 }
 
 // ===== COUNTDOWN =====
+const SPEAK_LEAD = 400; // ms to fire speech before display changes
+
 function doCountdown(onDone) {
-  let n = 3;
+  let n = 5;
   setCountdownDisplay(n, 'Get Ready!');
-  speak('Get ready!');
+  speak('Get ready!', { interrupt: true });
+
+  // Speech fires SPEAK_LEAD ms before each display change
+  let speechStep = n;
+  function fireSpeech() {
+    speechStep--;
+    if (speechStep > 0) {
+      playTick();
+      speak(String(speechStep), { interrupt: true });
+      gameTimeout(fireSpeech, 1000);
+    } else {
+      playMilestone();
+      speak('Go!', { rate: 1.1, pitch: 1.2, interrupt: true });
+    }
+  }
+  gameTimeout(fireSpeech, 1000 - SPEAK_LEAD); // first fires at 600ms
+
+  // Display changes every 1000ms
   const t = setInterval(() => {
     n--;
     if (n <= 0) {
       clearInterval(t);
       setCountdownDisplay('GO!', '');
-      playMilestone();
-      speak('Go!', { rate: 1.1, pitch: 1.2 });
-      setTimeout(onDone, 700);
+      gameTimeout(onDone, 900);
     } else {
-      playTick();
-      speak(String(n));
       setCountdownDisplay(n, '');
     }
   }, 1000);
 }
+
 function setCountdownDisplay(num, label) {
+  const isGo = num === 'GO!';
   quizStage.innerHTML = `
     <div class="countdown-screen">
-      <div class="game-bg strong"></div>
-      <div class="countdown-num">${num}</div>
+      <div class="countdown-ring-wrap">
+        <svg class="countdown-ring" viewBox="0 0 120 120">
+          <circle class="ring-track" cx="60" cy="60" r="52"/>
+          <circle class="ring-fill ${isGo ? 'ring-go' : ''}" cx="60" cy="60" r="52"
+            style="animation-duration: ${isGo ? '0.4s' : '1s'}"/>
+        </svg>
+        <div class="countdown-num ${isGo ? 'go' : ''}">${num}</div>
+      </div>
       ${label ? `<div class="countdown-label">${label}</div>` : ''}
     </div>`;
 }
@@ -360,11 +409,16 @@ function showQuestion() {
     <span class="scroll-corner br">${COMPASS_SVG}</span>`;
 
   const promptHtml = q.type === 'country-to-flag'
-    ? `<div class="q-prompt">Which flag is <strong>${q.country.name}</strong>?</div>`
-    : `<div class="mystery-wrap">
-         <img src="${flagUrl(q.country.code)}" alt="Mystery flag" class="mystery-flag" />
-       </div>
-       <div class="q-prompt">Which country does this flag belong to?</div>`;
+    ? `<div class="q-header">
+         <div class="q-label">Which flag is</div>
+         <div class="q-country-name">${q.country.name}</div>
+       </div>`
+    : `<div class="q-header q-header--flag">
+         <div class="q-label">Which country does this flag belong to?</div>
+         <div class="mystery-wrap">
+           <img src="${flagUrl(q.country.code)}" alt="Mystery flag" class="mystery-flag" />
+         </div>
+       </div>`;
 
   quizStage.innerHTML = `
     <div class="game-screen">
@@ -393,7 +447,7 @@ function showQuestion() {
     });
   });
 
-  speak(promptText, { rate: 1.05, interrupt: true });
+  speak(promptText, { rate: 1.05 });
   startTimer();
 }
 
@@ -433,8 +487,9 @@ function doReveal(selectedIdx) {
   const q = round[currentIdx];
   const correct = selectedIdx === q.correctIdx;
 
-  if (correct) { score++; playCorrect(); speak('Correct!', { pitch: 1.2, interrupt: true }); }
-  else { playReveal(); speak('The answer was ' + q.country.name, { interrupt: true }); }
+  const revealText = correct ? 'Correct!' : 'The answer was ' + q.country.name;
+  const revealOpts = correct ? { pitch: 1.2, interrupt: true } : { interrupt: true };
+  if (correct) playCorrect(); else playReveal();
 
   const btns = document.querySelectorAll('[data-idx]');
   btns.forEach(btn => {
@@ -444,23 +499,17 @@ function doReveal(selectedIdx) {
 
     if (i === q.correctIdx) {
       btn.classList.add('correct');
-      // Flag question: zoom the correct card, throw others out
-      if (q.type === 'country-to-flag') {
-        btn.classList.add('correct-keep');
-      }
+      if (q.type === 'country-to-flag') btn.classList.add('correct-keep');
     } else if (i === selectedIdx) {
       btn.classList.add('wrong');
     }
 
-    // Throw out all non-correct flags
     if (q.type === 'country-to-flag' && i !== q.correctIdx) {
-      // Small delay so user sees them momentarily before they fly off
-      setTimeout(() => {
+      gameTimeout(() => {
         btn.classList.add(`throw-out-${throwDir || 'tl'}`);
       }, 220);
     }
 
-    // On flag choices: reveal country name in badge after answer
     if (q.type === 'country-to-flag') {
       const badge = btn.querySelector('.choice-badge');
       if (badge) badge.textContent = q.choices[i].name.length > 10
@@ -469,12 +518,10 @@ function doReveal(selectedIdx) {
     }
   });
 
-  // Highlight country on map if correct
-  if (correct) {
-    setTimeout(() => highlightCountry(q.country.code), 300);
-  }
+  if (correct) gameTimeout(() => highlightCountry(q.country.code), 300);
 
-  setTimeout(advanceGame, REVEAL_TIME);
+  // Advance only after speech finishes AND minimum display time has passed
+  speakThenAdvance(revealText, revealOpts, REVEAL_TIME, advanceGame);
 }
 
 // ===== COUNTRY MAP HIGHLIGHT =====
@@ -559,14 +606,14 @@ function advanceGame() {
 
 function showMilestone(m) {
   playMilestone();
-  speak(m.headline + '. ' + m.sub, { rate: 0.95, interrupt: true });
+  speak(m.headline + '. ' + m.sub, { rate: 0.95 });
   quizStage.innerHTML = `
     <div class="milestone-screen">
       <div class="game-bg strong"></div>
       <div class="milestone-headline">${m.headline}</div>
       <div class="milestone-sub">${m.sub}</div>
     </div>`;
-  setTimeout(showQuestion, 2000);
+  gameTimeout(showQuestion, 2000);
 }
 
 // ===== RESULTS =====
@@ -595,7 +642,6 @@ function showResults() {
 
 // ===== INIT =====
 renderCategories();
-closeQuizBtn.addEventListener('click', closeQuiz);
 startBtn.addEventListener('click', openQuiz);
 fullscreenBtn.addEventListener('click', toggleFullscreen);
 
