@@ -3,7 +3,7 @@ import { playTick, playUrgent, playReveal, playCorrect } from '../core/audio.js'
 import { speak } from '../core/speech.js';
 import {
   ROUND_SIZE, QUESTION_TIME, REVEAL_TIME,
-  startGame, addScore, advanceGame,
+  startGame, addScore, addNoAnswer, advanceGame,
   startTimer, stopTimer, gameTimeout, speakThenAdvance,
   getIdx, getRound, getScore,
 } from '../core/engine.js';
@@ -132,15 +132,17 @@ function doReveal(selectedIdx) {
   const q = getRound()[getIdx()];
   const correct = selectedIdx === q.correctIdx;
   const noAnswer = selectedIdx === -1;
+  if (noAnswer) addNoAnswer();
 
   const revealText = correct ? 'Correct!'
     : noAnswer ? [
-        "Still recording! You'll get the next one!",
-        "Don't overthink it! Trust your gut next time!",
-        "Eyes on the prize! Keep it up!",
-        "You've got this! Stay focused!",
-        "No worries — next flag is yours!",
-      ][Math.floor(Math.random() * 5)]
+        "Did you get that one? Let us know in the comments!",
+        "What do you think? Drop your answer below!",
+        "Tricky one! Did you know that flag?",
+        "How are you going at home?",
+        "Comment below if you got it!",
+        "That's a tough one — did it catch you out?",
+      ][Math.floor(Math.random() * 6)]
     : getRevealPhrase(q.country);
 
   const revealOpts = correct ? { pitch: 1.2, interrupt: true } : { interrupt: true };
@@ -196,7 +198,7 @@ function flyFlagToMap(country) {
   const srcRect = srcEl.getBoundingClientRect();
   const srcX = srcRect.left - modalRect.left + srcRect.width  / 2;
   const srcY = srcRect.top  - modalRect.top  + srcRect.height / 2;
-  const flagW = Math.min(srcRect.width * 0.8, 72);
+  const flagW = Math.min(srcRect.width * 0.9, 140);
 
   // SVG viewBox is 0-1000 x 0-562 (16:9, matches container)
   const dstX = (coords[0] / 1000) * modalRect.width;
@@ -224,7 +226,7 @@ function flyFlagToMap(country) {
   el.animate([
     { transform: `translate(${srcX}px, ${srcY}px) translate(-50%,-50%) rotate(-8deg) scale(1)`,   opacity: 0.95 },
     { transform: `translate(${midX}px, ${midY}px) translate(-50%,-50%) rotate(10deg) scale(0.75)`, opacity: 1, offset: 0.42 },
-    { transform: `translate(${dstX}px, ${dstY}px) translate(-50%,-50%) rotate(0deg) scale(0.22)`,  opacity: 0.9 },
+    { transform: `translate(${dstX}px, ${dstY}px) translate(-50%,-50%) rotate(0deg) scale(0.45)`,  opacity: 0.9 },
   ], {
     duration: 1100,
     easing: 'cubic-bezier(0.4, 0, 0.2, 1)',

@@ -14,6 +14,7 @@ export const MILESTONES = {
 let score        = 0;
 let currentIdx   = 0;
 let round        = [];
+let noAnswerCount = 0;
 let timerInterval = null;
 let timeLeft     = QUESTION_TIME;
 let lastTickSec  = QUESTION_TIME;
@@ -34,22 +35,28 @@ export function gameTimeout(fn, ms) {
   return id;
 }
 
-// Advances only after BOTH speech ends AND minMs elapsed
+// Advances only after BOTH speech ends AND minMs elapsed.
+// Safety fallback: if onend never fires (common on mobile), proceed after minMs + 4s.
 export function speakThenAdvance(text, opts, minMs, callback) {
+  let done = false;
+  function proceed() { if (done) return; done = true; callback(); }
   let speechDone = false;
   let timerDone  = false;
-  function maybeGo() { if (speechDone && timerDone) callback(); }
+  function maybeGo() { if (speechDone && timerDone) proceed(); }
   speak(text, { ...opts, onend: () => { speechDone = true; maybeGo(); } });
   gameTimeout(() => { timerDone = true; maybeGo(); }, minMs);
+  gameTimeout(() => { speechDone = true; maybeGo(); }, minMs + 4000);
 }
 
 // onRestart: called by "Play Again" — should rebuild a fresh round and call startGame again
 export function startGame(roundData, onShowQuestion, onRestart) {
   _onShowQuestion = onShowQuestion;
   _onRestart = onRestart || null;
-  score = 0; currentIdx = 0; round = roundData;
+  score = 0; currentIdx = 0; noAnswerCount = 0; round = roundData;
   doCountdown(() => _onShowQuestion());
 }
+
+export function addNoAnswer() { noAnswerCount++; }
 
 export function addScore() {
   score++;
@@ -166,16 +173,30 @@ function getRank(s) {
 
 function showResults() {
   playGameOver();
+  const isRecording = noAnswerCount >= ROUND_SIZE * 0.7;
   const rank = getRank(score);
-  speak(`Round complete! You scored ${score} out of ${ROUND_SIZE}. ${rank.label}!`, { rate: 0.95, interrupt: true });
-  quizStage.innerHTML = `
-    <div class="result-screen">
-      <div class="game-bg strong"></div>
-      <div class="result-title">Round Complete!</div>
-      <div class="result-score">${score}<span class="result-total"> / ${ROUND_SIZE}</span></div>
-      <div class="result-rank" style="color:${rank.color}">${rank.label}</div>
-      <button class="btn primary result-btn" id="play-again">Play Again</button>
-    </div>`;
+
+  if (isRecording) {
+    speak(`Round complete! How did you go at home? Drop your score in the comments!`, { rate: 0.95, interrupt: true });
+    quizStage.innerHTML = `
+      <div class="result-screen">
+        <div class="game-bg strong"></div>
+        <div class="result-title">How did YOU go?</div>
+        <div class="result-score">${score}<span class="result-total"> / ${ROUND_SIZE}</span></div>
+        <div class="result-rank" style="color:var(--gs-accent)">Drop your score in the comments! 👇</div>
+        <button class="btn primary result-btn" id="play-again">Play Again</button>
+      </div>`;
+  } else {
+    speak(`Round complete! You scored ${score} out of ${ROUND_SIZE}. ${rank.label}!`, { rate: 0.95, interrupt: true });
+    quizStage.innerHTML = `
+      <div class="result-screen">
+        <div class="game-bg strong"></div>
+        <div class="result-title">Round Complete!</div>
+        <div class="result-score">${score}<span class="result-total"> / ${ROUND_SIZE}</span></div>
+        <div class="result-rank" style="color:${rank.color}">${rank.label}</div>
+        <button class="btn primary result-btn" id="play-again">Play Again</button>
+      </div>`;
+  }
   document.getElementById('play-again').addEventListener('click', () => {
     if (_onRestart) _onRestart();
   });

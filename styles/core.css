@@ -411,23 +411,25 @@ body {
   border: 1px solid rgba(255,214,0,0.15);
 }
 .hud-q {
-  font-size: 0.82rem; font-weight: 700;
-  color: var(--gs-muted); letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1rem, 2.2vw, 1.5rem); font-weight: 700;
+  color: var(--gs-text); letter-spacing: 0.02em;
 }
 .hud-timer {
   background: var(--gs-panel);
   border-radius: 999px;
-  padding: 0.22rem 0.85rem;
+  padding: 0.15rem 1rem;
 }
 .timer-counter {
   font-family: 'Fraunces', serif;
-  font-size: 1.45rem; color: var(--gs-accent);
+  font-size: clamp(2rem, 5.5vw, 3.8rem); color: var(--gs-accent);
   line-height: 1;
+  text-shadow: 0 0 20px rgba(255,214,0,0.5);
 }
 .hud-score {
-  font-size: 0.82rem; font-weight: 700;
-  color: var(--gs-accent); letter-spacing: 0.06em;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1rem, 2.2vw, 1.5rem); font-weight: 700;
+  color: var(--gs-accent); letter-spacing: 0.02em;
 }
 
 .timer-bar {
