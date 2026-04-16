@@ -67,6 +67,13 @@ async function openQuiz() {
 
   if (!cat || !LAUNCHERS[cat.id]) return;
 
+  // Unlock speech synthesis on iOS — must be called synchronously from a user gesture.
+  // The await fetch() below breaks the gesture chain, so we prime it here first.
+  if (window.speechSynthesis) {
+    const primer = new SpeechSynthesisUtterance('');
+    window.speechSynthesis.speak(primer);
+  }
+
   const modal = document.getElementById('quiz-modal');
   modal.classList.remove('hidden');
   modal.setAttribute('aria-hidden', 'false');

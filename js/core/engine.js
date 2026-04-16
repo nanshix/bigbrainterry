@@ -122,8 +122,12 @@ function doCountdown(onDone) {
     if (n > 0) {
       setCountdownDisplay(n, n === 5 ? 'Get Ready!' : '');
       playTick();
+      // Fire-and-forget — timer drives the pace, speech plays alongside.
+      // "Get ready" gets 1600ms (two words), numbers get 1200ms (single word).
       const text = n === 5 ? 'Get ready' : String(n);
-      speakThenAdvance(text, { interrupt: true }, 1000, () => { n--; step(); });
+      const wait = n === 5 ? 1600 : 1200;
+      speak(text, { interrupt: true });
+      gameTimeout(() => { n--; step(); }, wait);
     } else {
       setCountdownDisplay('GO!', '');
       playMilestone();
@@ -177,13 +181,13 @@ function showResults() {
   const rank = getRank(score);
 
   if (isRecording) {
-    speak(`Round complete! How did you go at home? Drop your score in the comments!`, { rate: 0.95, interrupt: true });
+    speak(`How did you go at home? Drop your score in the comments!`, { rate: 0.95, interrupt: true });
     quizStage.innerHTML = `
       <div class="result-screen">
         <div class="game-bg strong"></div>
         <div class="result-title">How did YOU go?</div>
-        <div class="result-score">${score}<span class="result-total"> / ${ROUND_SIZE}</span></div>
-        <div class="result-rank" style="color:var(--gs-accent)">Drop your score in the comments! 👇</div>
+        <div class="result-score" style="font-size:clamp(1.8rem,5vw,3.2rem);letter-spacing:0.02em">Drop your score<br>in the comments!</div>
+        <div class="result-rank" style="color:var(--gs-accent)">👇 Comment below 👇</div>
         <button class="btn primary result-btn" id="play-again">Play Again</button>
       </div>`;
   } else {

@@ -157,7 +157,7 @@
   overflow: visible;
   display: flex; flex-direction: column; align-items: center; gap: 0.22rem;
   min-height: 0;
-  height: auto;
+  overflow: hidden;
   box-shadow:
     0 4px 16px rgba(0,0,0,0.45),
     0 1px 3px rgba(0,0,0,0.3),
@@ -228,8 +228,10 @@
 }
 
 .choice-flag {
+  /* Fill the card — let the grid/card height drive proportions */
+  flex: 1;
+  min-height: 0;
   width: 100%;
-  aspect-ratio: 5 / 3;
   object-fit: cover;
   border-radius: 4px;
   display: block;
@@ -317,7 +319,21 @@
 
 /* ===== MOBILE ===== */
 @media (orientation: portrait) and (max-width: 768px) {
-  .flag-choices, .name-choices { gap: 0.35rem; }
+  .flag-choices {
+    gap: 0.35rem;
+    /* Auto rows: card height driven by image aspect-ratio, not grid height */
+    grid-template-rows: auto auto;
+  }
+  .flag-choice {
+    overflow: hidden;
+  }
+  .choice-flag {
+    /* On portrait, width drives height via aspect-ratio */
+    flex: none;
+    height: auto;
+    aspect-ratio: 5 / 3;
+  }
+  .name-choices { gap: 0.35rem; }
   .scroll-wrap { padding: 0.2rem 0.4rem 0.4rem; }
   .scroll-body::before, .scroll-body::after { display: none; }
 }

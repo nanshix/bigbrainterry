@@ -134,16 +134,21 @@ function doReveal(selectedIdx) {
   const noAnswer = selectedIdx === -1;
   if (noAnswer) addNoAnswer();
 
-  const revealText = correct ? 'Correct!'
-    : noAnswer ? [
-        "Did you get that one? Let us know in the comments!",
-        "What do you think? Drop your answer below!",
-        "Tricky one! Did you know that flag?",
-        "How are you going at home?",
-        "Comment below if you got it!",
-        "That's a tough one — did it catch you out?",
-      ][Math.floor(Math.random() * 6)]
-    : getRevealPhrase(q.country);
+  const phrase = getRevealPhrase(q.country);
+  const audienceLine = [
+    "Did you get that one?",
+    "What do you think?",
+    "Tricky one!",
+    "How are you going at home?",
+    "Did you know that flag?",
+    "Did it catch you out?",
+  ][Math.floor(Math.random() * 6)];
+
+  const revealText = correct
+    ? `Correct! ${phrase}`
+    : noAnswer
+      ? `${audienceLine} ${phrase}`
+      : phrase;
 
   const revealOpts = correct ? { pitch: 1.2, interrupt: true } : { interrupt: true };
 
