@@ -1,0 +1,4 @@
+id,name,icon,locked,desc,files
+flags,Flag Rush,🌍,false,"50 flags - 3 difficulty tiers - 5s each",flags.csv
+#crusade,Crusade History,⚔️,true,Medieval warfare & history,crusade.csv
+cities,City Pictures,🌆,true,Identify famous cities from photos,cities.csv

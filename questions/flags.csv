@@ -1,0 +1,194 @@
+code,name,difficulty
+us,United States,1
+gb,United Kingdom,1
+fr,France,1
+de,Germany,1
+it,Italy,1
+es,Spain,1
+jp,Japan,1
+cn,China,1
+br,Brazil,1
+ca,Canada,1
+au,Australia,1
+mx,Mexico,1
+in,India,1
+ru,Russia,1
+kr,South Korea,1
+ng,Nigeria,1
+za,South Africa,1
+eg,Egypt,1
+ar,Argentina,1
+tr,Turkey,1
+se,Sweden,1
+no,Norway,1
+dk,Denmark,1
+fi,Finland,1
+ch,Switzerland,1
+nl,Netherlands,1
+be,Belgium,1
+pl,Poland,1
+pt,Portugal,1
+gr,Greece,1
+ua,Ukraine,1
+th,Thailand,1
+vn,Vietnam,1
+id,Indonesia,1
+my,Malaysia,1
+ph,Philippines,1
+sg,Singapore,1
+nz,New Zealand,1
+sa,Saudi Arabia,1
+ae,UAE,1
+il,Israel,1
+ir,Iran,1
+pk,Pakistan,1
+bd,Bangladesh,1
+ke,Kenya,1
+gh,Ghana,1
+ma,Morocco,1
+cu,Cuba,1
+ie,Ireland,1
+et,Ethiopia,1
+at,Austria,2
+hu,Hungary,2
+cz,Czech Republic,2
+sk,Slovakia,2
+ro,Romania,2
+bg,Bulgaria,2
+rs,Serbia,2
+hr,Croatia,2
+si,Slovenia,2
+ba,Bosnia,2
+mk,North Macedonia,2
+al,Albania,2
+me,Montenegro,2
+lt,Lithuania,2
+lv,Latvia,2
+ee,Estonia,2
+by,Belarus,2
+md,Moldova,2
+az,Azerbaijan,2
+ge,Georgia,2
+am,Armenia,2
+kz,Kazakhstan,2
+uz,Uzbekistan,2
+tm,Turkmenistan,2
+af,Afghanistan,2
+np,Nepal,2
+lk,Sri Lanka,2
+mm,Myanmar,2
+kh,Cambodia,2
+la,Laos,2
+mn,Mongolia,2
+kp,North Korea,2
+co,Colombia,2
+ve,Venezuela,2
+cl,Chile,2
+pe,Peru,2
+ec,Ecuador,2
+bo,Bolivia,2
+py,Paraguay,2
+uy,Uruguay,2
+gt,Guatemala,2
+hn,Honduras,2
+sv,El Salvador,2
+ni,Nicaragua,2
+cr,Costa Rica,2
+pa,Panama,2
+do,Dominican Republic,2
+ht,Haiti,2
+jm,Jamaica,2
+tt,Trinidad,2
+cy,Cyprus,2
+mt,Malta,2
+lu,Luxembourg,2
+is,Iceland,2
+dz,Algeria,2
+ly,Libya,2
+tn,Tunisia,2
+sd,Sudan,2
+so,Somalia,2
+ug,Uganda,2
+zw,Zimbabwe,2
+mz,Mozambique,2
+ao,Angola,2
+cm,Cameroon,2
+sn,Senegal,2
+ml,Mali,2
+ci,Ivory Coast,2
+iq,Iraq,2
+sy,Syria,2
+jo,Jordan,2
+lb,Lebanon,2
+kw,Kuwait,2
+qa,Qatar,2
+bh,Bahrain,2
+om,Oman,2
+ye,Yemen,2
+zm,Zambia,2
+rw,Rwanda,2
+tz,Tanzania,2
+kg,Kyrgyzstan,3
+tj,Tajikistan,3
+bt,Bhutan,3
+mv,Maldives,3
+bn,Brunei,3
+tl,Timor-Leste,3
+pg,Papua New Guinea,3
+fj,Fiji,3
+ws,Samoa,3
+to,Tonga,3
+vu,Vanuatu,3
+sb,Solomon Islands,3
+ki,Kiribati,3
+tv,Tuvalu,3
+nr,Nauru,3
+mh,Marshall Islands,3
+fm,Micronesia,3
+pw,Palau,3
+ad,Andorra,3
+mc,Monaco,3
+sm,San Marino,3
+li,Liechtenstein,3
+xk,Kosovo,3
+bz,Belize,3
+bb,Barbados,3
+bs,Bahamas,3
+gd,Grenada,3
+ag,Antigua & Barbuda,3
+kn,St Kitts & Nevis,3
+dm,Dominica,3
+lc,St Lucia,3
+vc,St Vincent,3
+sr,Suriname,3
+gy,Guyana,3
+ne,Niger,3
+td,Chad,3
+bf,Burkina Faso,3
+gn,Guinea,3
+gw,Guinea-Bissau,3
+sl,Sierra Leone,3
+lr,Liberia,3
+tg,Togo,3
+bj,Benin,3
+cf,Central African Rep.,3
+ss,South Sudan,3
+er,Eritrea,3
+dj,Djibouti,3
+bi,Burundi,3
+mw,Malawi,3
+bw,Botswana,3
+na,Namibia,3
+ls,Lesotho,3
+sz,Eswatini,3
+mg,Madagascar,3
+mu,Mauritius,3
+km,Comoros,3
+cv,Cape Verde,3
+st,Sao Tome,3
+gq,Equatorial Guinea,3
+ga,Gabon,3
+cg,Congo,3
+cd,DR Congo,3
+mr,Mauritania,3
+gm,Gambia,3

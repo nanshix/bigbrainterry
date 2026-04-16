@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Big Brain Terry</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles/core.css" />
+    <link rel="stylesheet" href="styles/flags.css" />
   </head>
   <body>
     <div id="home-screen" class="home-screen">
@@ -46,11 +47,11 @@
           <img src="assets/worldmap169.png" alt="" class="map-img" />
         </div>
         <!-- SVG country highlight overlay (paths added dynamically) -->
-        <svg id="map-highlight-svg" class="map-highlight-svg" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true"></svg>
+        <svg id="map-highlight-svg" class="map-highlight-svg" viewBox="0 0 1000 562" preserveAspectRatio="none" aria-hidden="true"></svg>
         <div id="quiz-stage"></div>
       </div>
     </div>
 
-    <script src="app.js"></script>
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
