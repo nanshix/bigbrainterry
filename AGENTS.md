@@ -35,8 +35,10 @@ AGENTS.md                   ← you are here
 FILELIST.md                     ← doc manifest: what to read / when to update
 
 styles/
-  core.css                  ← homepage, modal shell, HUD, countdown, milestone, results
+  core.css                  ← homepage, modal shell, HUD, countdown, milestone, results,
+                               shared choice components (name-choices, choice-badge, reveal states)
   flags.css                 ← flag quiz only: parchment scroll, flashcards, throw animations
+  crusade.css               ← crusade quiz overrides: map tint, parchment warmth, question font size
 
 js/
   app.js                    ← entry: loads manifest, renders homepage, wires events
@@ -45,14 +47,19 @@ js/
     audio.js                ← Web Audio beeps (game-agnostic)
     speech.js               ← SpeechSynthesis voice host (game-agnostic)
     engine.js               ← game loop: timer, scoring, countdown, milestone, results
+                               startGame() accepts optional config: { milestones, getRank }
+                               milestone supports a `voice` field (spoken text separate from display)
   games/
     flags.js                ← all flag-quiz logic: data loading, question building,
                                showQuestion, doReveal, flyFlagToMap, map highlight,
                                reveal phrases
+    crusade.js              ← crusade history quiz: loadQuestions, buildRound (no-consecutive-dates),
+                               buildQuestion, showQuestion, doReveal, ttsPrep (year→words)
 
 questions/
   manifest.csv              ← category registry (one row per category; # to disable)
   flags.csv                 ← flag data: code,name,difficulty
+  crusade.csv               ← crusade questions: id,question,answer,wrong1-3,difficulty,type,reveal
 
 assets/
   worldmap169.png           ← 16:9 world map background

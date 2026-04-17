@@ -1,6 +1,7 @@
 import { parseCSV } from './utils.js';
 import { closeQuiz } from './core/engine.js';
 import { launch as launchFlags } from './games/flags.js';
+import { launch as launchCrusade } from './games/crusade.js';
 
 // ===== MANIFEST =====
 async function loadManifest() {
@@ -19,7 +20,8 @@ async function loadManifest() {
 
 // ===== GAME LAUNCHERS =====
 const LAUNCHERS = {
-  flags: launchFlags,
+  flags:   launchFlags,
+  crusade: launchCrusade,
 };
 
 // ===== STATE =====

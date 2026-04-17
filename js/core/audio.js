@@ -18,6 +18,12 @@ function beep(freq, dur, type = 'sine', vol = 0.25) {
   } catch (_) {}
 }
 
+// Call this synchronously during a user gesture (before any awaits) to unlock the AudioContext.
+export function initAudio() {
+  const ctx = getAudio();
+  if (ctx.state === 'suspended') ctx.resume();
+}
+
 export function playTick()      { beep(700,  0.07, 'square', 0.12); }
 export function playUrgent()    { beep(1000, 0.07, 'square', 0.18); }
 export function playReveal()    { [440,554,659].forEach((f,i)   => setTimeout(() => beep(f, 0.15, 'sine', 0.2),  i * 80)); }

@@ -21,6 +21,7 @@ let lastTickSec  = QUESTION_TIME;
 let pendingTimeouts = [];
 let _onShowQuestion = null;
 let _onRestart = null;
+let _config = {};
 
 const quizModal = document.getElementById('quiz-modal');
 const quizStage = document.getElementById('quiz-stage');
@@ -49,9 +50,11 @@ export function speakThenAdvance(text, opts, minMs, callback) {
 }
 
 // onRestart: called by "Play Again" — should rebuild a fresh round and call startGame again
-export function startGame(roundData, onShowQuestion, onRestart) {
+// config: optional { milestones, getRank } to override defaults per game
+export function startGame(roundData, onShowQuestion, onRestart, config = {}) {
   _onShowQuestion = onShowQuestion;
   _onRestart = onRestart || null;
+  _config = config;
   score = 0; currentIdx = 0; noAnswerCount = 0; round = roundData;
   doCountdown(() => _onShowQuestion());
 }
@@ -64,10 +67,13 @@ export function addScore() {
   if (s) s.textContent = score + ' pts';
 }
 
+export function getQuestionTime() { return _config.questionTime ?? QUESTION_TIME; }
+
 export function startTimer(onTick, onTimeout) {
   clearInterval(timerInterval);
-  timeLeft    = QUESTION_TIME;
-  lastTickSec = QUESTION_TIME;
+  const qTime  = getQuestionTime();
+  timeLeft    = qTime;
+  lastTickSec = qTime;
 
   timerInterval = setInterval(() => {
     timeLeft = Math.max(timeLeft - 0.1, 0);
@@ -75,7 +81,7 @@ export function startTimer(onTick, onTimeout) {
     const fill    = document.getElementById('timer-fill');
     const counter = document.getElementById('timer-counter');
     if (fill) {
-      fill.style.width = (timeLeft / QUESTION_TIME * 100) + '%';
+      fill.style.width = (timeLeft / qTime * 100) + '%';
       fill.classList.toggle('urgent', timeLeft <= 2);
     }
     if (counter) counter.textContent = Math.ceil(timeLeft);
@@ -100,7 +106,8 @@ export function stopTimer() {
 export function advanceGame() {
   currentIdx++;
   if (currentIdx >= ROUND_SIZE) { showResults(); return; }
-  const milestone = MILESTONES[currentIdx];
+  const milestoneMap = _config.milestones || MILESTONES;
+  const milestone = milestoneMap[currentIdx];
   if (milestone) showMilestone(milestone);
   else _onShowQuestion();
 }
@@ -113,6 +120,8 @@ export function closeQuiz() {
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
   quizModal.classList.add('hidden');
   quizModal.setAttribute('aria-hidden', 'true');
+  document.getElementById('quiz-frame').removeAttribute('data-game');
+  _config = {};
 }
 
 // ===== COUNTDOWN =====
@@ -156,7 +165,7 @@ function setCountdownDisplay(num, label) {
 // ===== MILESTONE =====
 function showMilestone(m) {
   playMilestone();
-  speak(m.headline + '. ' + m.sub, { rate: 0.95 });
+  speak(m.voice || (m.headline + '. ' + m.sub), { rate: 0.95 });
   quizStage.innerHTML = `
     <div class="milestone-screen">
       <div class="game-bg strong"></div>
@@ -178,7 +187,8 @@ function getRank(s) {
 function showResults() {
   playGameOver();
   const isRecording = noAnswerCount >= ROUND_SIZE * 0.7;
-  const rank = getRank(score);
+  const rankFn = _config.getRank || getRank;
+  const rank = rankFn(score);
 
   if (isRecording) {
     speak(`How did you go at home? Drop your score in the comments!`, { rate: 0.95, interrupt: true });

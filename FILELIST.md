@@ -22,6 +22,7 @@ Both the developer and AI agent should check this when the project changes direc
 | File | Purpose | Read when |
 |------|---------|-----------|
 | `plan/gamedesigner.md` | Game design review: difficulty curve, pacing, milestone placement | Changing game rules, difficulty balance, or question counts |
+| `plan/crusade/` | Five-agent design plan for the Crusade History category (game, content, visual, youtube, voice) | Building new features for the crusade category |
 | `plan/producer.md` | Content production review: episode structure, viewer retention | Planning recording sessions or adding new episode formats |
 | `plan/visual_overhaul.md` | Visual design decisions: parchment scroll, map background, flashcard UI | Touching the game modal's visual design |
 | `plan/voice_host.md` | Voice host design: personality, phrasing, reveal line style | Adding or changing voice lines |
