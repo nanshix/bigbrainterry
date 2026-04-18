@@ -1,7 +1,11 @@
 import { parseCSV } from './utils.js';
 import { closeQuiz } from './core/engine.js';
+import { initDevTools } from './core/dev.js';
 import { launch as launchFlags } from './games/flags.js';
 import { launch as launchCrusade } from './games/crusade.js';
+import { launch as launchCapitals } from './games/capitals.js';
+import { launch as launchCities } from './games/cities.js';
+import { launch as launchBreeds } from './games/breeds.js';
 
 // ===== MANIFEST =====
 async function loadManifest() {
@@ -20,14 +24,17 @@ async function loadManifest() {
 
 // ===== GAME LAUNCHERS =====
 const LAUNCHERS = {
-  flags:   launchFlags,
-  crusade: launchCrusade,
+  flags:    launchFlags,
+  crusade:  launchCrusade,
+  capitals: launchCapitals,
+  cities:   launchCities,
+  breeds:   launchBreeds,
 };
 
 // ===== STATE =====
 let categories    = [];
 let selectedCat   = 'flags';
-let shuffleMode   = true;
+let shuffleMode   = false;
 
 // ===== HOMEPAGE UI =====
 function renderCategories() {
@@ -81,6 +88,7 @@ async function openQuiz() {
   modal.setAttribute('aria-hidden', 'false');
 
   await LAUNCHERS[cat.id]();
+  if (location.hostname === 'localhost') initDevTools();
 }
 
 // ===== FULLSCREEN =====

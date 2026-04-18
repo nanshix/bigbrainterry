@@ -6,13 +6,13 @@ Use this when requesting changes: "keep the spec, change X" or "override element
 ---
 
 ## Layout
-`split-scroll` — see `plan/design/layouts.md`
+`split-scroll` — see `design/layouts.md`
 
 ---
 
 ## Elements in use
 All standard elements, plus the left-panel elements.
-See `plan/crusade/ui-elements.md` for the full detailed reference.
+See `design/crusade/ui_elements.md` for the full detailed reference.
 
 | Element ID | Included | Customisation |
 |------------|----------|---------------|
@@ -50,4 +50,4 @@ getRank      : getCrusadeRank      (Pilgrim → Footsoldier → Sergeant → Kni
 ---
 
 ## Layer reference
-See `plan/crusade/ui-layers.md`
+See `design/crusade/ui_layers.md`

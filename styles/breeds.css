@@ -1,0 +1,156 @@
+/* Dog Breeds — visual identity overrides */
+/* All rules scoped to [data-game="breeds"] — never touches core.css or other game CSS */
+
+:root {
+  --breeds-warm:      #d4a574;
+  --breeds-warm-dark: #8b6f47;
+  --breeds-cream:     #f9f5f0;
+  --breeds-cream-mid: #f3ede5;
+  --breeds-cream-edge:#e8dcd0;
+  --breeds-text:      #2c1810;
+  --breeds-text-muted:#6b5344;
+  --breeds-paw:       #c17039;
+}
+
+/* ===== MAP TINT ===== */
+/* Warm amber tint — friendly, domestic feel */
+[data-game="breeds"] .map-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%,
+    rgba(180,120,60,0.14) 0%,
+    rgba(120,70,20,0.08) 60%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===== PARCHMENT — warm cream paper ===== */
+[data-game="breeds"] .scroll-body {
+  background:
+    url('../assets/noise.svg'),
+    radial-gradient(ellipse at 20% 15%, rgba(180,120,60,0.12) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(140,90,40,0.10) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, var(--breeds-cream) 0%, var(--breeds-cream-mid) 60%, var(--breeds-cream-edge) 100%);
+  border-color: var(--breeds-warm-dark);
+}
+
+/* Warm tan binding bars */
+[data-game="breeds"] .scroll-body::before {
+  background: linear-gradient(180deg,
+    #d4a574 0%, #8b6f47 30%, #d4a574 55%, #8b6f47 80%, #6b5030 100%);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.4), inset 0 3px 6px rgba(255,200,130,0.2);
+}
+[data-game="breeds"] .scroll-body::after {
+  background: linear-gradient(0deg,
+    #d4a574 0%, #8b6f47 30%, #d4a574 55%, #8b6f47 80%, #6b5030 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4), inset 0 -3px 6px rgba(255,200,130,0.2);
+}
+
+/* ===== SPLIT LAYOUT — BREEDS ===== */
+[data-game="breeds"] .scroll-body { gap: 0; }
+
+[data-game="breeds"] .game-split-left {
+  border-right-color: rgba(139,111,71,0.25);
+}
+[data-game="breeds"] .game-split-label {
+  color: var(--breeds-text-muted);
+}
+
+/* Dog photo fills left panel — panel width driven by image height */
+.breeds-split-img-panel {
+  padding: 0 !important;
+  gap: 0 !important;
+}
+[data-game="breeds"] .breed-img {
+  height: min(100%, 175px);
+  width: auto;
+  flex: none;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.55),
+    0 0 0 2px rgba(212,165,116,0.4);
+  display: block;
+}
+
+/* Paw print in left panel (fact type) */
+.breeds-split-paw svg {
+  width: clamp(48px, 7vw, 88px);
+  height: auto;
+  filter: drop-shadow(0 3px 8px rgba(80,40,10,0.28));
+}
+
+@keyframes breed-appear {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1);    }
+}
+
+.breed-appear {
+  animation: breed-appear 0.45s ease-out both;
+}
+
+/* ===== QUESTION DISPLAY ===== */
+[data-game="breeds"] .q-country-name {
+  color: var(--breeds-text);
+  text-shadow: 0 1px 0 rgba(255,230,200,0.6), 0 2px 8px rgba(80,30,0,0.15);
+}
+
+[data-game="breeds"] .q-label {
+  color: var(--breeds-text-muted);
+  letter-spacing: 0.04em;
+}
+
+/* ===== ANSWER CHOICES ===== */
+
+/* Correct breed image: zoom and green glow */
+@keyframes breed-img-correct {
+  0%   { transform: scale(1); box-shadow: 0 8px 32px rgba(0,0,0,0.55); }
+  45%  { transform: scale(1.1); box-shadow: 0 0 0 5px rgba(0,230,118,0.6), 0 12px 40px rgba(0,0,0,0.55); }
+  100% { transform: scale(1.05); box-shadow: 0 0 0 4px rgba(0,230,118,0.35), 0 8px 32px rgba(0,0,0,0.55); }
+}
+[data-game="breeds"] .breed-img.breed-correct {
+  animation: breed-img-correct 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both;
+}
+
+/* Text-only highlight — no box/border */
+[data-game="breeds"] .name-choice.correct {
+  border-color: rgba(122,79,30,0.15) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+[data-game="breeds"] .name-choice.wrong {
+  border-color: rgba(122,79,30,0.15) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+[data-game="breeds"] .name-choice.correct .choice-name { color: #1a6b3a; }
+[data-game="breeds"] .name-choice.wrong .choice-name   { color: #8b2000; }
+
+[data-game="breeds"] .choice-name {
+  color: var(--breeds-text);
+  text-shadow: 0 1px 0 rgba(255,230,200,0.6), 0 2px 8px rgba(80,30,0,0.12);
+}
+
+[data-game="breeds"] .name-choice:hover:not(:disabled) {
+  background: rgba(180,120,60,0.07);
+}
+
+[data-game="breeds"] .choice-badge {
+  background: var(--breeds-warm-dark);
+}
+
+/* ===== MILESTONE SCREEN ===== */
+[data-game="breeds"] .milestone-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 44 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='22' cy='28' r='8' fill='%23a68670' opacity='0.7'/%3E%3Ccircle cx='8' cy='10' r='5' fill='%23a68670' opacity='0.6'/%3E%3Ccircle cx='22' cy='4' r='5' fill='%23a68670' opacity='0.6'/%3E%3Ccircle cx='36' cy='10' r='5' fill='%23a68670' opacity='0.6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40%;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}

@@ -1,0 +1,10 @@
+# Global game config defaults
+# Per-game overrides live in design/config/<game>.yaml
+
+question_time: 5          # seconds per question
+reveal_time: 2000         # ms to hold reveal screen before advancing (hardcoded for now)
+round_size: 30            # questions per round (hardcoded for now)
+urgency_threshold: 2      # seconds remaining when timer turns red (hardcoded for now)
+
+milestones: engine-default   # score thresholds → milestone screen (headline, sub, voice)
+get_rank: engine-default     # score (0–50) → { label, color } for results screen

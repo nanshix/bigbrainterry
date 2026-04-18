@@ -77,6 +77,48 @@
 .scroll-corner.bl { bottom: 6px; left: 8px; transform: rotate(270deg); }
 .scroll-corner.br { bottom: 6px; right: 8px; transform: rotate(180deg); }
 
+/* ===== SPLIT LAYOUT OVERRIDES — FLAGS ===== */
+[data-game="flags"] .scroll-body { gap: 0; }
+
+/* CTF: flags are content-sized at bottom; question area fills the rest above */
+[data-game="flags"] .game-split-right {
+  overflow: hidden;
+}
+
+/* Flag-to-country: flag sits in top of right panel */
+.flags-ftc-flag-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.6rem 0.3rem;
+  border-bottom: 1px solid rgba(122,79,30,0.15);
+}
+.flags-ftc-mystery {
+  max-height: 100%;
+  max-width: 90%;
+  width: auto;
+  height: auto;
+  aspect-ratio: 5 / 3;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.6),
+    0 0 0 2px #c8aa6e,
+    0 0 0 5px rgba(100,60,10,0.25);
+  display: block;
+  animation: split-left-in 0.42s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+}
+.flags-ftc-mystery[data-code="np"] { object-fit: contain; background: #f0f0f0; padding: 4px 10px; }
+
+/* Compass in left panel */
+.flags-split-compass svg {
+  width: clamp(44px, 6.5vw, 84px);
+  height: auto;
+  filter: drop-shadow(0 3px 8px rgba(40,10,0,0.25));
+}
+
 /* ===== QUESTION HEADER ===== */
 .q-header {
   display: flex; flex-direction: column;
@@ -88,12 +130,22 @@
   position: relative; z-index: 1;
 }
 
-/* Flag-to-country: header fills top half */
-.q-header--flag {
-  flex: 1; min-height: 0;
+/* Country-to-flag: label pins to top, country name fills + centres remaining space */
+.flags-ctf-header {
+  flex: 1;
+  min-height: clamp(70px, 20%, 120px);
+  border-bottom: 1px solid rgba(122,79,30,0.15);
+  justify-content: flex-start;   /* label at top, not centred */
+  gap: 0;
+  padding: 0.45rem 0.8rem 0.3rem;
+}
+.flags-ctf-name {
+  flex: 1;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  gap: 0.3rem;
-  padding: 0 0 0.2rem;
+  line-height: 1;
+  min-height: 0;
 }
 
 .q-label {
@@ -117,59 +169,49 @@
   text-shadow: 0 1px 0 rgba(255,230,160,0.6), 0 2px 8px rgba(100,50,0,0.18);
 }
 
-/* ===== MYSTERY FLAG (flag-to-country) ===== */
-.mystery-wrap {
-  display: flex; justify-content: center; align-items: center;
-  position: relative; z-index: 1;
-  flex: 1; min-height: 0;
-  width: 100%;
-}
-.mystery-flag {
-  width: 92%;
-  height: auto;
-  aspect-ratio: 5 / 3;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.6),
-    0 0 0 2px #c8aa6e,
-    0 0 0 5px rgba(100,60,10,0.25);
-  display: block;
-}
+/* CTF name overrides q-country-name font-size — must appear after .q-country-name */
+.flags-ctf-name { font-size: clamp(5rem, 12vw, 9rem); }
+.flags-ctf-name--long { font-size: clamp(2.8rem, 6vw, 5rem); }
 
-/* ===== FLAG CHOICES (2×2 flashcards) ===== */
+/* ===== FLAG CHOICES (2×2 bare flags — no boxes) ===== */
 .flag-choices {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  gap: 0.55rem;
-  flex: 1; min-height: 0;
+  justify-items: stretch;
+  column-gap: 1.6rem;
+  row-gap: 1.6rem;
+  flex: 0 0 auto;    /* content-sized: height driven by 5:3 aspect-ratio */
   width: 100%;
+  padding: 0.4rem 0.65rem 0.6rem;
   position: relative; z-index: 1;
 }
 .flag-choice {
   position: relative;
-  background: #fff;
-  border: 3px solid #c8aa6e;
-  border-radius: 8px;
-  padding: 0.3rem 0.3rem 0.25rem;
+  aspect-ratio: 5 / 3;            /* height = col-width × 3/5; centred in 1fr row */
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  padding: 0;
   cursor: pointer;
-  overflow: visible;
-  display: flex; flex-direction: column; align-items: center; gap: 0.22rem;
-  min-height: 0;
   overflow: hidden;
-  box-shadow:
-    0 4px 16px rgba(0,0,0,0.45),
-    0 1px 3px rgba(0,0,0,0.3),
-    inset 0 1px 0 rgba(255,255,255,0.8);
+  display: block;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.5), 0 0 0 1.5px rgba(200,170,110,0.35);
   animation: throw-in-tl 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
   transform-origin: center center;
-  transition: border-color 0.15s, transform 0.12s;
+  transition: transform 0.12s, box-shadow 0.12s;
 }
 .flag-choice:hover:not(:disabled) {
-  border-color: #e8a020;
-  transform: scale(1.04) translateY(-2px);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 7px 22px rgba(0,0,0,0.55), 0 0 0 2px rgba(200,170,110,0.65);
+}
+/* Badge overlaid top-left on the flag */
+.flag-choice .choice-badge {
+  position: absolute;
+  top: 5px; left: 5px;
+  z-index: 2;
+  opacity: 0.92;
+  width: 2.4rem; height: 2.4rem;
+  font-size: 1.1rem;
 }
 
 /* Per-card throw-in directions */
@@ -228,39 +270,27 @@
 }
 
 .choice-flag {
-  /* Fill the card — let the grid/card height drive proportions */
-  flex: 1;
-  min-height: 0;
-  width: 100%;
+  /* Fills the bare button absolutely — object-fit keeps flag proportions */
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
   object-fit: cover;
-  border-radius: 4px;
   display: block;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
 }
-.choice-flag[data-code="np"],
-.mystery-flag[data-code="np"] {
-  object-fit: contain;
-  background: #f0f0f0;
-  padding: 4px 10px;
+.choice-flag[data-code="np"] { object-fit: contain; background: #f0f0f0; padding: 4px 8px; }
+
+/* Reveal states for bare flags */
+[data-game="flags"] .flag-choice.correct {
+  box-shadow: 0 0 0 3px var(--gs-correct), 0 6px 20px rgba(0,0,0,0.45) !important;
+}
+[data-game="flags"] .flag-choice.wrong {
+  opacity: 0.38;
 }
 
 
 /* ===== MOBILE ===== */
 @media (orientation: portrait) and (max-width: 768px) {
-  .flag-choices {
-    gap: 0.35rem;
-    /* Auto rows: card height driven by image aspect-ratio, not grid height */
-    grid-template-rows: auto auto;
-  }
-  .flag-choice {
-    overflow: hidden;
-  }
-  .choice-flag {
-    /* On portrait, width drives height via aspect-ratio */
-    flex: none;
-    height: auto;
-    aspect-ratio: 5 / 3;
-  }
+  .flag-choices { gap: 0.3rem; }
   .scroll-wrap { padding: 0.2rem 0.4rem 0.4rem; }
   .scroll-body::before, .scroll-body::after { display: none; }
 }

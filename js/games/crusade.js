@@ -1,8 +1,9 @@
 import { shuffle, parseCSV } from '../utils.js';
 import { playTick, playUrgent, playReveal, playCorrect } from '../core/audio.js';
 import { speak } from '../core/speech.js';
+import { loadGameConfig } from '../core/config.js';
 import {
-  ROUND_SIZE, QUESTION_TIME, REVEAL_TIME,
+  QUESTION_TIME, REVEAL_TIME,
   startGame, addScore, addNoAnswer, advanceGame,
   startTimer, stopTimer, speakThenAdvance, getQuestionTime,
   getIdx, getRound, getScore,
@@ -220,7 +221,7 @@ function buildRound(questions) {
     ...medium.slice(0, 15),
     ...shuffle([...medium.slice(15), ...hard.slice(0, 10)]).slice(0, 15),
     ...hard.slice(10, 20),
-  ].slice(0, ROUND_SIZE);
+  ].slice(0, 50);
   return avoidConsecutiveDates(raw);
 }
 
@@ -278,7 +279,7 @@ function showQuestion() {
     <div class="game-screen">
       <div class="game-bg"></div>
       <div class="game-hud">
-        <span class="hud-q">Q ${n} / ${ROUND_SIZE}</span>
+        <span class="hud-q">Q ${n} / ${getRound().length}</span>
         <div class="hud-timer">
           <span id="timer-counter" class="timer-counter">${getQuestionTime()}</span>
         </div>
@@ -356,13 +357,13 @@ function doReveal(selectedIdx) {
 export async function launch() {
   document.getElementById('quiz-frame').setAttribute('data-game', 'crusade');
 
-  const questions = await loadQuestions();
+  const [questions, cfg] = await Promise.all([loadQuestions(), loadGameConfig('crusade')]);
 
   function restart() {
     const round = buildRound(questions).map(q => buildQuestion(q));
-    startGame(round, showQuestion, restart, { milestones: CRUSADE_MILESTONES, getRank: getCrusadeRank, questionTime: 12 });
+    startGame(round, showQuestion, restart, { ...cfg, milestones: CRUSADE_MILESTONES, getRank: getCrusadeRank });
   }
 
   const round = buildRound(questions).map(q => buildQuestion(q));
-  startGame(round, showQuestion, restart, { milestones: CRUSADE_MILESTONES, getRank: getCrusadeRank, questionTime: 12 });
+  startGame(round, showQuestion, restart, { ...cfg, milestones: CRUSADE_MILESTONES, getRank: getCrusadeRank });
 }

@@ -55,7 +55,8 @@ export function startGame(roundData, onShowQuestion, onRestart, config = {}) {
   _onShowQuestion = onShowQuestion;
   _onRestart = onRestart || null;
   _config = config;
-  score = 0; currentIdx = 0; noAnswerCount = 0; round = roundData;
+  score = 0; currentIdx = 0; noAnswerCount = 0;
+  round = config.roundSize ? roundData.slice(0, config.roundSize) : roundData;
   doCountdown(() => _onShowQuestion());
 }
 
@@ -105,7 +106,7 @@ export function stopTimer() {
 
 export function advanceGame() {
   currentIdx++;
-  if (currentIdx >= ROUND_SIZE) { showResults(); return; }
+  if (currentIdx >= round.length) { showResults(); return; }
   const milestoneMap = _config.milestones || MILESTONES;
   const milestone = milestoneMap[currentIdx];
   if (milestone) showMilestone(milestone);
@@ -186,7 +187,7 @@ function getRank(s) {
 
 function showResults() {
   playGameOver();
-  const isRecording = noAnswerCount >= ROUND_SIZE * 0.7;
+  const isRecording = noAnswerCount >= round.length * 0.7;
   const rankFn = _config.getRank || getRank;
   const rank = rankFn(score);
 
@@ -201,12 +202,12 @@ function showResults() {
         <button class="btn primary result-btn" id="play-again">Play Again</button>
       </div>`;
   } else {
-    speak(`Round complete! You scored ${score} out of ${ROUND_SIZE}. ${rank.label}!`, { rate: 0.95, interrupt: true });
+    speak(`Round complete! You scored ${score} out of ${round.length}. ${rank.label}!`, { rate: 0.95, interrupt: true });
     quizStage.innerHTML = `
       <div class="result-screen">
         <div class="game-bg strong"></div>
         <div class="result-title">Round Complete!</div>
-        <div class="result-score">${score}<span class="result-total"> / ${ROUND_SIZE}</span></div>
+        <div class="result-score">${score}<span class="result-total"> / ${round.length}</span></div>
         <div class="result-rank" style="color:${rank.color}">${rank.label}</div>
         <button class="btn primary result-btn" id="play-again">Play Again</button>
       </div>`;

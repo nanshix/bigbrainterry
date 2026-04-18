@@ -1,11 +1,12 @@
 import { shuffle, flagUrl, parseCSV } from '../utils.js';
 import { playTick, playUrgent, playReveal, playCorrect } from '../core/audio.js';
 import { speak } from '../core/speech.js';
+import { loadGameConfig } from '../core/config.js';
 import {
-  ROUND_SIZE, QUESTION_TIME, REVEAL_TIME,
+  REVEAL_TIME,
   startGame, addScore, addNoAnswer, advanceGame,
   startTimer, stopTimer, gameTimeout, speakThenAdvance,
-  getIdx, getRound, getScore,
+  getIdx, getRound, getScore, getQuestionTime,
 } from '../core/engine.js';
 
 const THROW_DIRS = ['tl', 'tr', 'bl', 'br'];
@@ -36,7 +37,7 @@ function buildRound(countries) {
     ...medium.slice(0, 15),
     ...shuffle([...medium.slice(15, 20), ...hard.slice(0, 10)]).slice(0, 15),
     ...hard.slice(10, 20),
-  ].slice(0, ROUND_SIZE);
+  ].slice(0, 50);
 }
 
 function buildQuestion(country, index, countries) {
@@ -55,41 +56,43 @@ function showQuestion() {
   const labels = ['A', 'B', 'C', 'D'];
   const quizStage = document.getElementById('quiz-stage');
 
-  const choicesHtml = q.type === 'country-to-flag'
-    ? `<div class="flag-choices">
-        ${q.choices.map((c, i) => `
-          <button class="flag-choice" data-idx="${i}" data-throw="${THROW_DIRS[i]}">
-            <span class="choice-badge">${labels[i]}</span>
-            <img src="${flagUrl(c.code)}" alt="Flag" class="choice-flag" data-code="${c.code}" />
-          </button>`).join('')}
-      </div>`
-    : `<div class="name-choices">
-        ${q.choices.map((c, i) => `
-          <button class="name-choice" data-idx="${i}">
-            <span class="choice-badge">${labels[i]}</span>
-            <span class="choice-name">${c.name}</span>
-          </button>`).join('')}
-      </div>`;
-
-  const promptText = q.type === 'country-to-flag'
-    ? `Which flag is ${q.country.name}?`
-    : `Which country does this flag belong to?`;
-
   const scrollCorners = `
     <span class="scroll-corner tl">${COMPASS_SVG}</span>
     <span class="scroll-corner tr">${COMPASS_SVG}</span>
     <span class="scroll-corner bl">${COMPASS_SVG}</span>
     <span class="scroll-corner br">${COMPASS_SVG}</span>`;
 
-  const promptHtml = q.type === 'country-to-flag'
-    ? `<div class="q-header">
-         <div class="q-label">Which flag is</div>
-         <div class="q-country-name">${q.country.name}</div>
+  // country-to-flag: left = compass + country name; right = bare flag 2×2 grid
+  // flag-to-country: left = compass + label;        right = flag on top + name choices below
+  const leftPanel = `<div class="game-split-left">
+       <div class="flags-split-compass">${COMPASS_SVG}</div>
+       <div class="game-split-label">Flag Rush</div>
+     </div>`;
+
+  const rightPanel = q.type === 'country-to-flag'
+    ? `<div class="game-split-right">
+         <div class="q-header flags-ctf-header">
+           <div class="q-label">Which flag is this country?</div>
+           <div class="q-country-name flags-ctf-name${q.country.name.length > 12 ? ' flags-ctf-name--long' : ''}">${q.country.name}</div>
+         </div>
+         <div class="flag-choices">
+           ${q.choices.map((c, i) => `
+             <button class="flag-choice" data-idx="${i}" data-throw="${THROW_DIRS[i]}">
+               <img src="${flagUrl(c.code)}" class="choice-flag" data-code="${c.code}" alt="Flag" />
+               <span class="choice-badge">${labels[i]}</span>
+             </button>`).join('')}
+         </div>
        </div>`
-    : `<div class="q-header q-header--flag">
-         <div class="q-label">Which country does this flag belong to?</div>
-         <div class="mystery-wrap">
-           <img src="${flagUrl(q.country.code)}" alt="Mystery flag" class="mystery-flag" data-code="${q.country.code}" />
+    : `<div class="game-split-right">
+         <div class="flags-ftc-flag-wrap">
+           <img src="${flagUrl(q.country.code)}" class="mystery-flag flags-ftc-mystery" data-code="${q.country.code}" alt="Mystery flag" />
+         </div>
+         <div class="name-choices">
+           ${q.choices.map((c, i) => `
+             <button class="name-choice" data-idx="${i}">
+               <span class="choice-badge">${labels[i]}</span>
+               <span class="choice-name">${c.name}</span>
+             </button>`).join('')}
          </div>
        </div>`;
 
@@ -97,9 +100,9 @@ function showQuestion() {
     <div class="game-screen">
       <div class="game-bg"></div>
       <div class="game-hud">
-        <span class="hud-q">Q ${n} / ${ROUND_SIZE}</span>
+        <span class="hud-q">Q ${n} / ${getRound().length}</span>
         <div class="hud-timer">
-          <span id="timer-counter" class="timer-counter">${QUESTION_TIME}</span>
+          <span id="timer-counter" class="timer-counter">${getQuestionTime()}</span>
         </div>
         <span class="hud-score">${getScore()} pts</span>
       </div>
@@ -107,8 +110,10 @@ function showQuestion() {
       <div class="scroll-wrap">
         <div class="scroll-body">
           ${scrollCorners}
-          ${promptHtml}
-          ${choicesHtml}
+          <div class="game-split">
+            ${leftPanel}
+            ${rightPanel}
+          </div>
         </div>
       </div>
     </div>`;
@@ -120,7 +125,10 @@ function showQuestion() {
     });
   });
 
-  speak(promptText, { rate: 1.05 });
+  const spoken = q.type === 'country-to-flag'
+    ? `Which flag is ${q.country.name}?`
+    : `Which country does this flag belong to?`;
+  speak(spoken, { rate: 1.05 });
   startTimer(
     sec => sec <= 2 ? playUrgent() : playTick(),
     ()  => doReveal(-1),
@@ -170,13 +178,6 @@ function doReveal(selectedIdx) {
 
     if (q.type === 'country-to-flag' && i !== q.correctIdx) {
       gameTimeout(() => btn.classList.add(`throw-out-${throwDir || 'tl'}`), 220);
-    }
-
-    if (q.type === 'country-to-flag') {
-      const badge = btn.querySelector('.choice-badge');
-      if (badge) badge.textContent = q.choices[i].name.length > 10
-        ? q.choices[i].name.slice(0, 10) + '…'
-        : q.choices[i].name;
     }
   });
 
@@ -243,7 +244,7 @@ function flyFlagToMap(country) {
 }
 
 // ===== MAP HIGHLIGHT =====
-function highlightCountry(code) {
+export function highlightCountry(code) {
   const svg = document.getElementById('map-highlight-svg');
   if (!svg) return;
   const coords = getCountryCoords(code);
@@ -441,13 +442,13 @@ function getRevealPhrase(country) {
 
 // ===== PUBLIC ENTRY POINT =====
 export async function launch() {
-  const countries = await loadCountries();
+  const [countries, cfg] = await Promise.all([loadCountries(), loadGameConfig('flags')]);
 
   function restart() {
     const newRound = buildRound(countries).map((c, i) => buildQuestion(c, i, countries));
-    startGame(newRound, showQuestion, restart);
+    startGame(newRound, showQuestion, restart, cfg);
   }
 
   const round = buildRound(countries).map((c, i) => buildQuestion(c, i, countries));
-  startGame(round, showQuestion, restart);
+  startGame(round, showQuestion, restart, cfg);
 }

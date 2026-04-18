@@ -66,6 +66,7 @@ assets/
   logo.svg
   noise.svg                 ← parchment texture
 
+design/                     ← game design system: layouts.md, elements.md, configs.md
 plan/                       ← design documents (see FILELIST.md for what's current)
 ```
 
@@ -73,7 +74,7 @@ plan/                       ← design documents (see FILELIST.md for what's cur
 
 ## Architecture Rules
 
-These are non-negotiable. See `plan/project_structure_principles.md` for full reasoning.
+These are non-negotiable. See `project_structure_principles.md` for full reasoning.
 
 - **`engine.js` is game-agnostic.** It knows nothing about flags. It manages: timer, score, advance, countdown, milestone, results. Game modules call engine utilities and register callbacks.
 - **Each game module is self-contained.** `games/flags.js` owns everything flag-specific. Adding a new game = new file in `games/`, new row in `manifest.csv`, register in `LAUNCHERS` in `app.js`.

@@ -1,0 +1,132 @@
+/* World Cities — visual identity overrides */
+/* All rules scoped to [data-game="cities"] — never touches core.css, flags.css, or crusade.css */
+
+:root {
+  --cities-navy:      #1a3a5c;
+  --cities-blue:      #2471a3;
+  --cities-paper:     #f4f6f8;
+  --cities-paper-mid: #e8ecf0;
+  --cities-paper-edge:#d0d8e4;
+  --cities-text:      #0d1b2a;
+  --cities-text-muted:#2c4a6a;
+  --cities-dot-flash: rgba(36,113,163,0.85);
+}
+
+/* ===== MAP TINT ===== */
+/* Cool blue overlay — travel document / atlas aesthetic */
+[data-game="cities"] .map-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%,
+    rgba(26,58,92,0.16) 0%,
+    rgba(15,30,55,0.10) 60%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===== PARCHMENT → CLEAN PAPER ===== */
+/* White-grey travel document aesthetic — not medieval parchment */
+[data-game="cities"] .scroll-body {
+  background:
+    url('../assets/noise.svg'),
+    radial-gradient(ellipse at 20% 15%, rgba(26,58,92,0.06) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(26,58,92,0.05) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, var(--cities-paper) 0%, var(--cities-paper-mid) 60%, var(--cities-paper-edge) 100%);
+  border-color: var(--cities-navy);
+}
+
+/* Navy binding bars — evoke modern passport spine */
+[data-game="cities"] .scroll-body::before {
+  background: linear-gradient(180deg,
+    #2471a3 0%, #1a3a5c 30%, #2471a3 55%, #1a3a5c 80%, #122843 100%);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.5), inset 0 3px 6px rgba(100,160,220,0.15);
+}
+[data-game="cities"] .scroll-body::after {
+  background: linear-gradient(0deg,
+    #2471a3 0%, #1a3a5c 30%, #2471a3 55%, #1a3a5c 80%, #122843 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(100,160,220,0.15);
+}
+
+/* ===== QUESTION DISPLAY ===== */
+[data-game="cities"] .q-country-name {
+  font-size: clamp(0.85rem, 2vw, 1.4rem);
+  color: var(--cities-text);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8), 0 2px 8px rgba(0,30,70,0.10);
+}
+
+[data-game="cities"] .q-label {
+  color: var(--cities-text-muted);
+  letter-spacing: 0.05em;
+}
+
+/* ===== SPLIT LAYOUT — CITIES ===== */
+[data-game="cities"] .scroll-body { gap: 0; }
+
+[data-game="cities"] .game-split-left {
+  border-right-color: rgba(26,58,92,0.2);
+}
+[data-game="cities"] .game-split-label {
+  color: var(--cities-text-muted);
+}
+
+.cities-split-illus svg {
+  width: clamp(48px, 7vw, 90px);
+  height: auto;
+  filter: drop-shadow(0 3px 8px rgba(0,30,70,0.22));
+}
+
+/* ===== ANSWER CHOICES ===== */
+[data-game="cities"] .choice-name {
+  color: var(--cities-text);
+  text-shadow: 0 1px 0 rgba(255,255,255,0.8), 0 2px 8px rgba(0,30,70,0.06);
+}
+
+[data-game="cities"] .name-choice:hover:not(:disabled) {
+  background: rgba(26,58,92,0.06);
+}
+
+[data-game="cities"] .choice-badge {
+  background: var(--cities-navy);
+}
+
+/* ===== CITY DOT ANIMATION ===== */
+/* Sonar ping: core dot holds then fades; ring expands and fades */
+.city-dot-core {
+  fill: white;
+  animation: city-core-fade 1.8s ease forwards;
+}
+
+.city-dot-flash {
+  fill: none;
+  stroke: var(--cities-dot-flash);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: city-ping 1.6s ease-out forwards;
+}
+
+@keyframes city-core-fade {
+  0%, 55% { opacity: 1; }
+  100%     { opacity: 0; }
+}
+
+@keyframes city-ping {
+  0%   { transform: scale(1);  opacity: 0.9; }
+  100% { transform: scale(9);  opacity: 0;   }
+}
+
+/* ===== MILESTONE SCREEN ===== */
+[data-game="cities"] .milestone-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 44 44' fill='none' stroke='%231a3a5c' stroke-width='2' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='22' cy='22' r='16'/%3E%3Cline x1='6' y1='22' x2='38' y2='22'/%3E%3Cellipse cx='22' cy='22' rx='7' ry='16'/%3E%3Cpath d='M9,14 Q22,10 35,14' fill='none'/%3E%3Cpath d='M9,30 Q22,34 35,30' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40%;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
