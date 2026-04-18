@@ -113,17 +113,29 @@ function showQuestion() {
     ? `What is the capital of ${q.country}?`
     : `Which country has ${q.capital} as its capital?`;
 
-  const choicesHtml = `<div class="name-choices">
-    ${q.choices.map((c, i) => `
-      <button class="name-choice" data-idx="${i}">
-        <span class="choice-badge">${labels[i]}</span>
-        <span class="choice-name">${isCtC ? c.capital : c.country}</span>
-      </button>`).join('')}
-  </div>`;
+  const choicesHtml = isCtC
+    ? `<div class="name-choices">
+        ${q.choices.map((c, i) => `
+          <button class="name-choice" data-idx="${i}">
+            <span class="choice-badge">${labels[i]}</span>
+            <span class="choice-name">${c.capital}</span>
+          </button>`).join('')}
+       </div>`
+    : `<div class="name-choices">
+        ${q.choices.map((c, i) => `
+          <button class="name-choice cap-cc-choice" data-idx="${i}">
+            <span class="choice-badge">${labels[i]}</span>
+            <div class="cap-cc-flag-wrap">
+              <img src="${flagUrl(c.code)}" class="cap-cc-flag${c.code === 'np' ? ' cap-flag-np' : ''}" alt="" />
+            </div>
+            <span class="choice-name">${c.country}</span>
+          </button>`).join('')}
+       </div>`;
 
   const leftPanel = isCtC
-    ? `<div class="game-split-left cap-split-flag-panel">
-         <img src="${flagUrl(q.code)}" class="cap-split-flag${q.code === 'np' ? ' cap-flag-np' : ''}" alt="" />
+    ? `<div class="game-split-left">
+         <div class="cap-split-capital-name">${q.country}</div>
+         <div class="game-split-label">Capital City</div>
        </div>`
     : `<div class="game-split-left">
          <div class="cap-split-capital-name">${q.capital}</div>
@@ -147,10 +159,15 @@ function showQuestion() {
           <div class="game-split">
             ${leftPanel}
             <div class="game-split-right">
-              <div class="q-header">
-                <div class="q-label">${qLabel}</div>
-                <div class="q-country-name">${qName}</div>
-              </div>
+              ${isCtC
+                ? `<div class="cap-flag-wrap">
+                     <div class="q-label">What is the capital of</div>
+                     <img src="${flagUrl(q.code)}" class="cap-split-flag${q.code === 'np' ? ' cap-flag-np' : ''}" alt="" />
+                   </div>`
+                : `<div class="q-header">
+                     <div class="q-label">${qLabel}</div>
+                     <div class="q-country-name">${qName}</div>
+                   </div>`}
               ${choicesHtml}
             </div>
           </div>

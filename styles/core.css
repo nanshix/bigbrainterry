@@ -418,7 +418,7 @@ body {
   min-width: 58px;
 }
 
-/* Shared pill style for all three HUD items */
+/* No shared background — items float bare, dramatic */
 .hud-q,
 .hud-timer,
 .hud-score {
@@ -426,17 +426,22 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(10,5,0,0.7);
-  border-radius: 14px;
-  padding: 0.65rem 0.6rem;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,214,0,0.18);
-  box-shadow: 0 4px 18px rgba(0,0,0,0.5);
+  background: transparent;
+  border: none;
+  padding: 0.2rem 0;
+  cursor: default;
+  transition: transform 0.18s cubic-bezier(0.22,1,0.36,1), filter 0.18s;
+}
+.hud-q:hover,
+.hud-timer:hover,
+.hud-score:hover {
+  transform: scale(1.18) translateX(4px);
+  filter: brightness(1.3) drop-shadow(0 0 12px rgba(255,214,0,0.6));
 }
 
 .hud-q {
   font-family: 'Fraunces', serif;
-  font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
   font-weight: 700;
   color: var(--gs-text);
   letter-spacing: 0.02em;
@@ -445,20 +450,20 @@ body {
 }
 
 .hud-timer {
-  padding: 0.8rem 0.7rem;
+  padding: 0;
 }
 
 .timer-counter {
   font-family: 'Fraunces', serif;
-  font-size: clamp(2.4rem, 5vw, 4.2rem);
+  font-size: clamp(3.5rem, 7vw, 6rem);
   color: var(--gs-accent);
   line-height: 1;
-  text-shadow: 0 0 28px rgba(255,214,0,0.65), 0 0 8px rgba(255,214,0,0.4);
+  text-shadow: 0 0 40px rgba(255,214,0,0.7), 0 0 12px rgba(255,214,0,0.5);
 }
 
 .hud-score {
   font-family: 'Fraunces', serif;
-  font-size: clamp(0.85rem, 1.3vw, 1.05rem);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
   font-weight: 700;
   color: var(--gs-accent);
   letter-spacing: 0.02em;
@@ -488,14 +493,12 @@ body {
 #dev-hud {
   position: absolute;
   right: 0.5rem;
-  top: 4%;
-  bottom: 4%;
+  bottom: 1.2rem;
   z-index: 20;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  gap: 0;
+  gap: 0.5rem;
 }
 .dev-btn {
   width: 3.6rem; height: 3.6rem;

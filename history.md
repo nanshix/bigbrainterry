@@ -10,7 +10,13 @@
 - [done] i set default round_size to 7, but when i start the game, it is still Q0/50, i m expecting Q0/7 — engine now slices round to config.roundSize; set roundSize in each game's startGame config to take effect
 - [done] i can see u have the random dice button turn on by default, i want it to be disabled by default
  - [done] pictures take time to load — breeds now preloads the next question's image while you answer the current one. For other games (flag images are local, should be fast).
+ 2. [done] apply split-scroll to all categories — all 5 games now use left-panel + right-panel layout. Left panels: flags=mystery flag or compass+name, capitals=country flag or capital name, cities=skyline SVG, breeds=dog photo or paw SVG.
+ 3. [done] the HUD bar rethink — vertical strip on left side of screen, outside the scroll
+4. [done] backdoor bug button — node server.js; POST /api/bug appends to bugs.md; ? button in dev-hud (localhost only)
+5. [done] backdoor thumbs up — POST /api/merit delta:+1; writes to questions/merit.json
+6. [done] backdoor thumbs down — POST /api/merit delta:-1
 ---
+## what i m not sure yet, help compare and tell me your preference if u have any
  - should i pre download some background picture for you? or i d better leave it to you
  - should we have background picture ready as asset saved locally, or using online link
 
@@ -26,3 +32,15 @@ Two fonts: `Space Grotesk` (UI chrome — badges, labels, buttons) and `Fraunces
 
 **Is the question-answer format standardized or is it case by case for each category?**
 The scroll card, HUD bar, and timer bar are shared via core.css — same across all games. The question header layout inside the scroll varies: flags has a flag image or country name; crusade has a split left/right panel with type illustration; capitals/cities/breeds use the standard text header. Answer choices are always a 2×2 grid, but flags uses image cards while others use text name cards.
+
+---
+Two question types:         
+- q1o — 1 picture question + 4 text options (e.g. flag → pick country name)
+- qo4 — text question + 4 picture+text options (e.g. country name → pick flag)
+
+Design order — always in this sequence:
+1. Left : right panel ratio (left is flex: 0 0 auto, icon-driven; right is flex: 1)
+2. Upper-right : lower-right ratio — the picture/image zone is flex: 0 0 auto (aspect-ratio drives height); the text/fill zone is flex: 1 (centered content)
+3. Place content by type: q1o puts picture upper-right, text choices lower; qo4 puts text question upper (flex:1), picture choices lower (flex: 0 0 auto)
+
+Rules: Images always honour their aspect ratio. Gaps between choices are equal (column = row). Long text names need a JS-detected --long class with a smaller font-size — never allow overflow.

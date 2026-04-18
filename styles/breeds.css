@@ -58,21 +58,28 @@
   color: var(--breeds-text-muted);
 }
 
-/* Dog photo fills left panel — panel width driven by image height */
-.breeds-split-img-panel {
-  padding: 0 !important;
-  gap: 0 !important;
+/* Dog photo in upper-right question area */
+.breeds-img-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.6rem 0.3rem;
+  border-bottom: 1px solid rgba(139,111,71,0.2);
 }
 [data-game="breeds"] .breed-img {
-  height: min(100%, 175px);
+  max-height: 100%;
+  max-width: 90%;
   width: auto;
-  flex: none;
-  object-fit: cover;
-  border-radius: 8px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 10px;
   box-shadow:
-    0 8px 32px rgba(0,0,0,0.55),
+    0 10px 40px rgba(0,0,0,0.55),
     0 0 0 2px rgba(212,165,116,0.4);
   display: block;
+  animation: breed-appear 0.42s cubic-bezier(0.22,1,0.36,1) 0.1s both;
 }
 
 /* Paw print in left panel (fact type) */

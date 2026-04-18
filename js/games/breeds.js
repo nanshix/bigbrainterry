@@ -108,14 +108,10 @@ function showQuestion() {
     <span class="scroll-corner bl">${PAW_SVG}</span>
     <span class="scroll-corner br">${PAW_SVG}</span>`;
 
-  const leftPanel = q.type === 'image'
-    ? `<div class="game-split-left breeds-split-img-panel">
-         <img src="${q.image_url}" class="breed-img breed-appear" alt="Dog breed" />
-       </div>`
-    : `<div class="game-split-left">
-         <div class="breeds-split-paw">${PAW_SVG}</div>
-         <div class="game-split-label">Dog Breeds</div>
-       </div>`;
+  const leftPanel = `<div class="game-split-left">
+    <div class="breeds-split-paw">${PAW_SVG}</div>
+    <div class="game-split-label">Dog Breeds</div>
+  </div>`;
 
   const choicesHtml = `<div class="name-choices">
     ${q.choices.map((c, i) => `
@@ -142,10 +138,14 @@ function showQuestion() {
           <div class="game-split">
             ${leftPanel}
             <div class="game-split-right">
-              <div class="q-header">
-                <div class="q-label">${q.type === 'image' ? 'What breed is this dog?' : 'Which breed is this?'}</div>
-                ${q.type === 'fact' ? `<div class="q-country-name">${q.fact}</div>` : ''}
-              </div>
+              ${q.type === 'image'
+                ? `<div class="breeds-img-wrap">
+                     <img src="${q.image_url}" class="breed-img breed-appear" alt="Dog breed" />
+                   </div>`
+                : `<div class="q-header">
+                     <div class="q-label">Which breed is this?</div>
+                     <div class="q-country-name">${q.fact}</div>
+                   </div>`}
               ${choicesHtml}
             </div>
           </div>

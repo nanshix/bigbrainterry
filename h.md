@@ -18,7 +18,4 @@ if my points does not make sense, ask me to explain
  - some questions do not have any picture — needs per-game audit; currently flags+breeds always have images, capitals now has flag in question, cities/crusade are text only. Tell me which game bothers you most and I'll fix that first.  --- all games need picutre, it could be some small svg like it for crusade, or it could be something like the way u did for flags, what ever it is, i need pictures for all categories
 
 ## what i want for change
-3. [done] the HUD bar rethink — vertical strip on left side of screen, outside the scroll
-4. [done] backdoor bug button — node server.js; POST /api/bug appends to bugs.md; ? button in dev-hud (localhost only)
-5. [done] backdoor thumbs up — POST /api/merit delta:+1; writes to questions/merit.json
-6. [done] backdoor thumbs down — POST /api/merit delta:-1
+
