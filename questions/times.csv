@@ -1,0 +1,51 @@
+id,a,b,difficulty,type,reveal
+t001,2,3,1,product,Six! Two times three — the very foundation of multiplication!
+t002,2,4,1,product,Eight! Two fours — simple doubling at its finest!
+t003,2,6,1,product,Twelve! Two sixes — always just double the second number in the twos!
+t004,3,3,1,product,Nine! Three squared — perfect squares are always worth committing to memory!
+t005,3,4,1,product,Twelve! Three fours — or four threes, multiplication always works both ways!
+t006,3,5,1,product,Fifteen! Three fives — count up in threes or fives and you will always land here!
+t007,4,4,1,product,Sixteen! Four squared — every square number is a milestone worth knowing!
+t008,4,5,1,product,Twenty! Four fives — one of the most satisfying products in the whole table!
+t009,5,5,1,product,Twenty-five! Five squared — every multiple of five ends in zero or five, no exceptions!
+t010,2,9,1,product,Eighteen! Two nines — and the digits of any nine-times answer always add up to nine!
+t011,2,5,1,missing,Five! Two times five equals ten — the simplest path to the tens!
+t012,3,4,1,missing,Four! Three fours is twelve — counting up in threes always gets you there!
+t013,4,5,1,missing,Five! Four fives is twenty — swap them round and it is still the same!
+t014,5,3,1,missing,Three! Five threes is fifteen — the answer never changes no matter which way you write it!
+t015,2,8,1,missing,Eight! Two eights is sixteen — the power of simple doubling!
+t016,6,6,2,product,Thirty-six! Six squared — the first perfect square that trips most people up!
+t017,6,7,2,product,Forty-two! Six sevens — forty-two, the legendary answer to life the universe and everything!
+t018,6,8,2,product,Forty-eight! Six eights — that is four dozen, an incredibly useful number!
+t019,7,7,2,product,Forty-nine! Seven squared — one of the trickiest facts in the entire times table!
+t020,7,8,2,product,Fifty-six! Seven eights — five six seven eight, the ultimate memory sequence!
+t021,7,9,2,product,Sixty-three! Seven nines — check the digit sum: six plus three equals nine. Perfect!
+t022,8,8,2,product,Sixty-four! Eight squared — also two to the power of six for the mathematicians!
+t023,8,9,2,product,Seventy-two! Eight nines — a dozen sixes, and those digits add to nine as always!
+t024,9,9,2,product,Eighty-one! Nine squared — use the finger trick: hold down finger nine and count!
+t025,4,7,2,product,Twenty-eight! Four sevens — think four times five plus four times two if you need a shortcut!
+t026,5,8,2,product,Forty! Five eights — five times any even number always lands on zero!
+t027,6,9,2,product,Fifty-four! Six nines — five and four sum to nine, just as the nines table demands!
+t028,4,8,2,product,Thirty-two! Four eights — that is also two to the power of five!
+t029,5,7,2,product,Thirty-five! Five sevens — five times any odd number always ends in five!
+t030,3,8,2,product,Twenty-four! Three eights — twenty-four, the number of hours in every single day!
+t031,6,7,2,missing,Seven! Six sevens is forty-two — arguably the most famous times-table product ever!
+t032,7,8,2,missing,Eight! Seven eights is fifty-six — five six seven eight, the sequence you never forget!
+t033,8,9,2,missing,Nine! Eight nines is seventy-two — master the nines and the rest falls into place!
+t034,6,9,2,missing,Nine! Six nines is fifty-four — and five plus four is nine as always!
+t035,4,8,2,missing,Eight! Four eights is thirty-two — two to the power of five, if you want to impress!
+t036,11,11,3,product,One hundred and twenty-one! Eleven squared — every digit pattern in the elevens is a thing of beauty!
+t037,11,12,3,product,One hundred and thirty-two! Eleven twelves — eleven times any number just shifts and adds the digits!
+t038,12,12,3,product,One hundred and forty-four! Twelve squared — the absolute pinnacle of the times table! A perfect gross!
+t039,7,12,3,product,Eighty-four! Seven twelves — try seven tens plus seven twos for the fastest route!
+t040,8,12,3,product,Ninety-six! Eight twelves — just four away from one hundred, think eight tens plus sixteen!
+t041,9,12,3,product,One hundred and eight! Nine twelves — check those digits: one plus zero plus eight equals nine!
+t042,9,11,3,product,Ninety-nine! Nine elevens — one hundred minus one, the most elegant shortcut there is!
+t043,8,11,3,product,Eighty-eight! Eight elevens — double eights, a rhythm you can practically hear!
+t044,7,11,3,product,Seventy-seven! Seven elevens — lucky sevens mirrored in both the tens and units!
+t045,6,12,3,product,Seventy-two! Six twelves — same answer as eight nines, proof that multiplication never lies!
+t046,12,12,3,missing,Twelve! Twelve twelves is one hundred and forty-four — if you know this you have conquered the whole table!
+t047,11,11,3,missing,Eleven! Eleven elevens is one hundred and twenty-one — a perfect palindrome!
+t048,7,12,3,missing,Twelve! Seven twelves is eighty-four — seven tens plus seven twos always gets you there!
+t049,9,12,3,missing,Twelve! Nine twelves is one hundred and eight — and those digits add up to nine!
+t050,8,11,3,missing,Eleven! Eight elevens is eighty-eight — double eights, completely impossible to forget!

@@ -1,0 +1,120 @@
+/* Addition — teal/green theme */
+/* All rules scoped to [data-game="addition"] */
+
+:root {
+  --add-ink:        #0a2518;
+  --add-accent:     #1a6b3a;
+  --add-paper:      #edf7f1;
+  --add-paper-mid:  #dff0e8;
+  --add-paper-edge: #cce6d8;
+  --add-text:       #0a2518;
+  --add-text-muted: #2e6e4a;
+}
+
+[data-game="addition"] .map-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%,
+    rgba(20, 100, 55, 0.16) 0%,
+    rgba(10, 60, 30, 0.10) 60%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-game="addition"] .scroll-body {
+  background:
+    url('../assets/noise.svg'),
+    radial-gradient(ellipse at 20% 15%, rgba(20,100,55,0.10) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(10,60,30,0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, var(--add-paper) 0%, var(--add-paper-mid) 60%, var(--add-paper-edge) 100%);
+  border-color: var(--add-accent);
+}
+
+[data-game="addition"] .scroll-body::before {
+  background: linear-gradient(180deg,
+    #2e8a52 0%, #1a6b3a 30%, #2e8a52 55%, #1a6b3a 80%, #0d4a24 100%);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.5), inset 0 3px 6px rgba(80,200,120,0.2);
+}
+[data-game="addition"] .scroll-body::after {
+  background: linear-gradient(0deg,
+    #2e8a52 0%, #1a6b3a 30%, #2e8a52 55%, #1a6b3a 80%, #0d4a24 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(80,200,120,0.2);
+}
+
+[data-game="addition"] .scroll-body { gap: 0; }
+
+[data-game="addition"] .game-split-left {
+  border-right-color: rgba(20,100,55,0.2);
+}
+[data-game="addition"] .game-split-label {
+  color: var(--add-text-muted);
+}
+
+.math-split-icon svg {
+  width: clamp(44px, 6.5vw, 84px);
+  height: auto;
+  filter: drop-shadow(0 3px 8px rgba(10,60,30,0.28));
+}
+
+[data-game="addition"] .times-q-wrap {
+  border-bottom-color: rgba(20,100,55,0.15);
+}
+
+[data-game="addition"] .q-label {
+  color: var(--add-text-muted);
+}
+
+[data-game="addition"] .times-equation {
+  color: var(--add-text);
+  text-shadow: 0 2px 12px rgba(20,100,55,0.18), 0 1px 0 rgba(200,240,210,0.6);
+}
+
+[data-game="addition"] .math-op {
+  color: var(--add-text-muted);
+  font-weight: 700;
+}
+
+[data-game="addition"] .math-blank {
+  color: var(--add-accent);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: var(--add-accent);
+  text-underline-offset: 5px;
+}
+
+[data-game="addition"] .math-eq {
+  color: var(--add-text-muted);
+  font-weight: 700;
+}
+
+[data-game="addition"] .choice-name {
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  color: var(--add-text);
+  text-shadow: 0 1px 0 rgba(200,240,210,0.5), 0 2px 8px rgba(10,60,30,0.1);
+}
+
+[data-game="addition"] .name-choice:hover:not(:disabled) {
+  background: rgba(20,100,55,0.07);
+}
+
+[data-game="addition"] .choice-badge {
+  background: var(--add-accent);
+}
+
+[data-game="addition"] .name-choice.correct .choice-name { color: #005a1e !important; }
+[data-game="addition"] .name-choice.wrong   .choice-name { color: #8b0000 !important; }
+
+[data-game="addition"] .milestone-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 44 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='18' y='5' width='8' height='34' rx='4' fill='%231a6b3a'/%3E%3Crect x='5' y='18' width='34' height='8' rx='4' fill='%231a6b3a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40%;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}

@@ -1,0 +1,118 @@
+/* Subtraction — crimson/red theme */
+/* All rules scoped to [data-game="subtraction"] */
+
+:root {
+  --sub-ink:        #2a0808;
+  --sub-accent:     #8b1a1a;
+  --sub-paper:      #fdf0f0;
+  --sub-paper-mid:  #f7e0e0;
+  --sub-paper-edge: #eecece;
+  --sub-text:       #2a0808;
+  --sub-text-muted: #6e2a2a;
+}
+
+[data-game="subtraction"] .map-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%,
+    rgba(140, 30, 30, 0.16) 0%,
+    rgba(80, 15, 15, 0.10) 60%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-game="subtraction"] .scroll-body {
+  background:
+    url('../assets/noise.svg'),
+    radial-gradient(ellipse at 20% 15%, rgba(140,30,30,0.10) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(80,15,15,0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, var(--sub-paper) 0%, var(--sub-paper-mid) 60%, var(--sub-paper-edge) 100%);
+  border-color: var(--sub-accent);
+}
+
+[data-game="subtraction"] .scroll-body::before {
+  background: linear-gradient(180deg,
+    #b03232 0%, #8b1a1a 30%, #b03232 55%, #8b1a1a 80%, #5a0d0d 100%);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.5), inset 0 3px 6px rgba(240,120,120,0.2);
+}
+[data-game="subtraction"] .scroll-body::after {
+  background: linear-gradient(0deg,
+    #b03232 0%, #8b1a1a 30%, #b03232 55%, #8b1a1a 80%, #5a0d0d 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(240,120,120,0.2);
+}
+
+[data-game="subtraction"] .scroll-body { gap: 0; }
+
+[data-game="subtraction"] .game-split-left {
+  border-right-color: rgba(140,30,30,0.2);
+}
+[data-game="subtraction"] .game-split-label {
+  color: var(--sub-text-muted);
+}
+
+[data-game="subtraction"] .math-split-icon svg rect {
+  fill: var(--sub-accent);
+}
+
+[data-game="subtraction"] .times-q-wrap {
+  border-bottom-color: rgba(140,30,30,0.15);
+}
+
+[data-game="subtraction"] .q-label {
+  color: var(--sub-text-muted);
+}
+
+[data-game="subtraction"] .times-equation {
+  color: var(--sub-text);
+  text-shadow: 0 2px 12px rgba(140,30,30,0.18), 0 1px 0 rgba(255,210,210,0.6);
+}
+
+[data-game="subtraction"] .math-op {
+  color: var(--sub-text-muted);
+  font-weight: 700;
+}
+
+[data-game="subtraction"] .math-blank {
+  color: var(--sub-accent);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: var(--sub-accent);
+  text-underline-offset: 5px;
+}
+
+[data-game="subtraction"] .math-eq {
+  color: var(--sub-text-muted);
+  font-weight: 700;
+}
+
+[data-game="subtraction"] .choice-name {
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  color: var(--sub-text);
+  text-shadow: 0 1px 0 rgba(255,210,210,0.5), 0 2px 8px rgba(80,15,15,0.1);
+}
+
+[data-game="subtraction"] .name-choice:hover:not(:disabled) {
+  background: rgba(140,30,30,0.07);
+}
+
+[data-game="subtraction"] .choice-badge {
+  background: var(--sub-accent);
+}
+
+[data-game="subtraction"] .name-choice.correct .choice-name { color: #005a1e !important; }
+[data-game="subtraction"] .name-choice.wrong   .choice-name { color: #8b0000 !important; }
+
+[data-game="subtraction"] .milestone-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 44 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='5' y='18' width='34' height='8' rx='4' fill='%238b1a1a'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40%;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}

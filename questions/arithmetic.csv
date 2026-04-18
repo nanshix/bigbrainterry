@@ -1,0 +1,51 @@
+id,a,op,b,difficulty,type,reveal
+arith01,23,+,14,1,result,Twenty-three plus fourteen equals thirty-seven!
+arith02,45,-,12,1,result,Forty-five minus twelve is thirty-three!
+arith03,31,+,25,1,result,Thirty-one plus twenty-five equals fifty-six!
+arith04,67,-,34,1,result,Sixty-seven minus thirty-four is thirty-three!
+arith05,42,+,13,1,result,Forty-two plus thirteen equals fifty-five!
+arith06,58,-,23,1,result,Fifty-eight minus twenty-three equals thirty-five!
+arith07,36,+,41,1,result,Thirty-six plus forty-one is seventy-seven!
+arith08,74,-,31,1,result,Seventy-four minus thirty-one equals forty-three!
+arith09,53,+,24,1,result,Fifty-three plus twenty-four equals seventy-seven!
+arith10,86,-,54,1,result,Eighty-six minus fifty-four is thirty-two!
+arith11,6,*,7,2,result,Six times seven equals forty-two!
+arith12,8,*,9,2,result,Eight times nine — seventy-two!
+arith13,56,/,8,2,result,Fifty-six divided by eight equals seven!
+arith14,7,*,8,2,result,Seven times eight is fifty-six!
+arith15,63,/,7,2,result,Sixty-three divided by seven equals nine!
+arith16,9,*,6,2,result,Nine times six is fifty-four!
+arith17,48,/,6,2,result,Forty-eight divided by six equals eight!
+arith18,8,*,7,2,result,Eight times seven equals fifty-six!
+arith19,72,/,9,2,result,Seventy-two divided by nine equals eight!
+arith20,6,*,9,2,result,Six times nine is fifty-four!
+arith21,54,/,6,2,result,Fifty-four divided by six equals nine!
+arith22,7,*,9,2,result,Seven times nine equals sixty-three!
+arith23,81,/,9,2,result,Eighty-one divided by nine equals nine!
+arith24,6,*,8,2,result,Six times eight is forty-eight!
+arith25,64,/,8,2,result,Sixty-four divided by eight equals eight!
+arith26,35,+,47,2,result,Carry the one — thirty-five plus forty-seven equals eighty-two!
+arith27,84,-,37,2,result,Borrow the ten — eighty-four minus thirty-seven equals forty-seven!
+arith28,56,+,38,2,result,Fifty-six plus thirty-eight — carry the one — ninety-four!
+arith29,93,-,46,2,result,Ninety-three minus forty-six equals forty-seven!
+arith30,67,+,45,2,result,Sixty-seven plus forty-five is one hundred and twelve!
+arith31,12,*,12,3,result,Twelve times twelve — one hundred and forty-four!
+arith32,11,*,13,3,result,Eleven times thirteen equals one hundred and forty-three!
+arith33,144,/,12,3,result,One hundred and forty-four divided by twelve equals twelve!
+arith34,9,*,13,3,result,Nine times thirteen equals one hundred and seventeen!
+arith35,132,/,11,3,result,One hundred and thirty-two divided by eleven equals twelve!
+arith36,78,+,56,3,result,Seventy-eight plus fifty-six — one hundred and thirty-four!
+arith37,143,-,67,3,result,One hundred and forty-three minus sixty-seven equals seventy-six!
+arith38,14,*,9,3,result,Fourteen times nine equals one hundred and twenty-six!
+arith39,117,/,9,3,result,One hundred and seventeen divided by nine equals thirteen!
+arith40,126,/,14,3,result,One hundred and twenty-six divided by fourteen equals nine!
+arith41,11,*,14,3,result,Eleven times fourteen equals one hundred and fifty-four!
+arith42,154,/,11,3,result,One hundred and fifty-four divided by eleven equals fourteen!
+arith43,85,+,79,3,result,Eighty-five plus seventy-nine — one hundred and sixty-four!
+arith44,162,-,87,3,result,One hundred and sixty-two minus eighty-seven equals seventy-five!
+arith45,13,*,13,3,result,Thirteen times thirteen equals one hundred and sixty-nine!
+arith46,169,/,13,3,result,One hundred and sixty-nine divided by thirteen equals thirteen!
+arith47,97,+,68,3,result,Ninety-seven plus sixty-eight — one hundred and sixty-five!
+arith48,174,-,87,3,result,One hundred and seventy-four minus eighty-seven — eighty-seven exactly!
+arith49,15,*,12,3,result,Fifteen times twelve equals one hundred and eighty!
+arith50,180,/,15,3,result,One hundred and eighty divided by fifteen equals twelve!

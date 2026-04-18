@@ -1,0 +1,106 @@
+/* Arithmetic — amber/copper theme */
+/* All rules scoped to [data-game="arithmetic"] */
+
+:root {
+  --arith-ink:        #2a1800;
+  --arith-accent:     #7a4a00;
+  --arith-paper:      #fdf5e8;
+  --arith-paper-mid:  #f7ebd2;
+  --arith-paper-edge: #eeddbb;
+  --arith-text:       #2a1800;
+  --arith-text-muted: #6e4a10;
+}
+
+[data-game="arithmetic"] .map-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%,
+    rgba(122, 74, 0, 0.16) 0%,
+    rgba(80, 48, 0, 0.10) 60%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-game="arithmetic"] .scroll-body {
+  background:
+    url('../assets/noise.svg'),
+    radial-gradient(ellipse at 20% 15%, rgba(122,74,0,0.10) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(80,48,0,0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, var(--arith-paper) 0%, var(--arith-paper-mid) 60%, var(--arith-paper-edge) 100%);
+  border-color: var(--arith-accent);
+}
+
+[data-game="arithmetic"] .scroll-body::before {
+  background: linear-gradient(180deg,
+    #a06220 0%, #7a4a00 30%, #a06220 55%, #7a4a00 80%, #4e2e00 100%);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.5), inset 0 3px 6px rgba(240,180,80,0.2);
+}
+[data-game="arithmetic"] .scroll-body::after {
+  background: linear-gradient(0deg,
+    #a06220 0%, #7a4a00 30%, #a06220 55%, #7a4a00 80%, #4e2e00 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(240,180,80,0.2);
+}
+
+[data-game="arithmetic"] .scroll-body { gap: 0; }
+
+[data-game="arithmetic"] .game-split-left {
+  border-right-color: rgba(122,74,0,0.2);
+}
+[data-game="arithmetic"] .game-split-label {
+  color: var(--arith-text-muted);
+}
+
+[data-game="arithmetic"] .math-split-icon svg rect,
+[data-game="arithmetic"] .math-split-icon svg circle {
+  fill: var(--arith-accent);
+}
+
+[data-game="arithmetic"] .times-q-wrap {
+  border-bottom-color: rgba(122,74,0,0.15);
+}
+
+[data-game="arithmetic"] .q-label {
+  color: var(--arith-text-muted);
+}
+
+[data-game="arithmetic"] .times-equation {
+  color: var(--arith-text);
+  text-shadow: 0 2px 12px rgba(122,74,0,0.18), 0 1px 0 rgba(255,230,170,0.6);
+}
+
+[data-game="arithmetic"] .math-op {
+  color: var(--arith-text-muted);
+  font-weight: 700;
+}
+
+[data-game="arithmetic"] .choice-name {
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  color: var(--arith-text);
+  text-shadow: 0 1px 0 rgba(255,230,170,0.5), 0 2px 8px rgba(80,48,0,0.1);
+}
+
+[data-game="arithmetic"] .name-choice:hover:not(:disabled) {
+  background: rgba(122,74,0,0.07);
+}
+
+[data-game="arithmetic"] .choice-badge {
+  background: var(--arith-accent);
+}
+
+[data-game="arithmetic"] .name-choice.correct .choice-name { color: #005a1e !important; }
+[data-game="arithmetic"] .name-choice.wrong   .choice-name { color: #8b0000 !important; }
+
+[data-game="arithmetic"] .milestone-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 44 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='18' y='5' width='8' height='34' rx='4' fill='%237a4a00'/%3E%3Crect x='5' y='18' width='34' height='8' rx='4' fill='%237a4a00'/%3E%3Ccircle cx='32' cy='10' r='4' fill='%237a4a00'/%3E%3Ccircle cx='12' cy='34' r='4' fill='%237a4a00'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40%;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}

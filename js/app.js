@@ -6,6 +6,11 @@ import { launch as launchCrusade } from './games/crusade.js';
 import { launch as launchCapitals } from './games/capitals.js';
 import { launch as launchCities } from './games/cities.js';
 import { launch as launchBreeds } from './games/breeds.js';
+import { launch as launchTimes }      from './games/times.js';
+import { launch as launchAddition }   from './games/addition.js';
+import { launch as launchSubtraction } from './games/subtraction.js';
+import { launch as launchArithmetic } from './games/arithmetic.js';
+import { launch as launchGeneric }    from './games/generic.js';
 
 // ===== MANIFEST =====
 async function loadManifest() {
@@ -29,6 +34,10 @@ const LAUNCHERS = {
   capitals: launchCapitals,
   cities:   launchCities,
   breeds:   launchBreeds,
+  times:       launchTimes,
+  addition:    launchAddition,
+  subtraction: launchSubtraction,
+  arithmetic:  launchArithmetic,
 };
 
 // ===== STATE =====
@@ -74,7 +83,7 @@ async function openQuiz() {
     ? available[Math.floor(Math.random() * available.length)]
     : categories.find(c => c.id === selectedCat);
 
-  if (!cat || !LAUNCHERS[cat.id]) return;
+  if (!cat) return;
 
   // Unlock speech synthesis on iOS — must be called synchronously from a user gesture.
   // The await fetch() below breaks the gesture chain, so we prime it here first.
@@ -87,7 +96,8 @@ async function openQuiz() {
   modal.classList.remove('hidden');
   modal.setAttribute('aria-hidden', 'false');
 
-  await LAUNCHERS[cat.id]();
+  const launcher = LAUNCHERS[cat.id] ?? (() => launchGeneric(cat.id, cat.name, cat.icon));
+  await launcher();
   if (location.hostname === 'localhost') initDevTools();
 }
 

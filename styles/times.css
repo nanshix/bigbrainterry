@@ -1,0 +1,141 @@
+/* Times Table — visual identity overrides */
+/* All rules scoped to [data-game="times"] — never touches core.css or other game CSS */
+
+:root {
+  --times-ink:        #1a1040;
+  --times-accent:     #3d2b8a;
+  --times-paper:      #f0ecf8;
+  --times-paper-mid:  #e6e0f2;
+  --times-paper-edge: #d8d0ea;
+  --times-text:       #1a1040;
+  --times-text-muted: #5a4a8a;
+}
+
+/* ===== MAP TINT ===== */
+[data-game="times"] .map-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%,
+    rgba(60, 40, 140, 0.16) 0%,
+    rgba(30, 20, 80, 0.10) 60%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ===== PARCHMENT — cool lavender paper ===== */
+[data-game="times"] .scroll-body {
+  background:
+    url('../assets/noise.svg'),
+    radial-gradient(ellipse at 20% 15%, rgba(60,40,140,0.10) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(40,20,100,0.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, var(--times-paper) 0%, var(--times-paper-mid) 60%, var(--times-paper-edge) 100%);
+  border-color: var(--times-accent);
+}
+
+/* Indigo binding bars */
+[data-game="times"] .scroll-body::before {
+  background: linear-gradient(180deg,
+    #5a4aaa 0%, #3d2b8a 30%, #5a4aaa 55%, #3d2b8a 80%, #2a1a6a 100%);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.5), inset 0 3px 6px rgba(140,120,240,0.2);
+}
+[data-game="times"] .scroll-body::after {
+  background: linear-gradient(0deg,
+    #5a4aaa 0%, #3d2b8a 30%, #5a4aaa 55%, #3d2b8a 80%, #2a1a6a 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(140,120,240,0.2);
+}
+
+/* ===== SPLIT LAYOUT ===== */
+[data-game="times"] .scroll-body { gap: 0; }
+
+[data-game="times"] .game-split-left {
+  border-right-color: rgba(60,40,140,0.2);
+}
+[data-game="times"] .game-split-label {
+  color: var(--times-text-muted);
+}
+
+/* × icon in left panel */
+.times-split-icon svg {
+  width: clamp(44px, 6.5vw, 84px);
+  height: auto;
+  filter: drop-shadow(0 3px 8px rgba(40,20,100,0.28));
+}
+
+/* ===== QUESTION AREA ===== */
+.times-q-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid rgba(60,40,140,0.15);
+}
+
+[data-game="times"] .q-label {
+  color: var(--times-text-muted);
+  letter-spacing: 0.05em;
+}
+
+.times-equation {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(3.2rem, 8vw, 6.5rem);
+  font-weight: 900;
+  color: var(--times-text);
+  text-align: center;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(60,40,140,0.18), 0 1px 0 rgba(220,210,255,0.6);
+}
+
+/* Operator (×, =) — slightly muted */
+.times-op {
+  color: var(--times-text-muted);
+  font-weight: 700;
+}
+
+/* Missing number blank — bold indigo underline */
+.times-blank {
+  color: var(--times-accent);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-decoration-color: var(--times-accent);
+  text-underline-offset: 5px;
+}
+
+/* ===== ANSWER CHOICES ===== */
+[data-game="times"] .choice-name {
+  font-size: clamp(1.6rem, 4vw, 3rem);
+  color: var(--times-text);
+  text-shadow: 0 1px 0 rgba(220,210,255,0.5), 0 2px 8px rgba(40,20,100,0.1);
+}
+
+[data-game="times"] .name-choice:hover:not(:disabled) {
+  background: rgba(60,40,140,0.07);
+}
+
+[data-game="times"] .choice-badge {
+  background: var(--times-accent);
+}
+
+/* ===== CORRECT / WRONG ===== */
+[data-game="times"] .name-choice.correct .choice-name { color: #005a1e !important; }
+[data-game="times"] .name-choice.wrong   .choice-name { color: #8b0000 !important; }
+
+/* ===== MILESTONE SCREEN — × watermark ===== */
+[data-game="times"] .milestone-screen::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 44 44' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='5' y='18' width='34' height='8' rx='4' fill='%233d2b8a' transform='rotate(45 22 22)'/%3E%3Crect x='5' y='18' width='34' height='8' rx='4' fill='%233d2b8a' transform='rotate(-45 22 22)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 40%;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}

@@ -1,0 +1,51 @@
+id,a,b,difficulty,type,reveal
+sub01,45,12,1,diff,Forty-five minus twelve equals thirty-three!
+sub02,37,14,1,diff,Thirty-seven minus fourteen is twenty-three!
+sub03,56,23,1,diff,Fifty-six minus twenty-three equals thirty-three!
+sub04,48,35,1,diff,Forty-eight minus thirty-five is thirteen!
+sub05,79,34,1,diff,Seventy-nine minus thirty-four — forty-five!
+sub06,66,24,1,diff,Sixty-six minus twenty-four equals forty-two!
+sub07,89,43,1,diff,Eighty-nine minus forty-three is forty-six!
+sub08,57,26,1,diff,Fifty-seven minus twenty-six equals thirty-one!
+sub09,64,31,1,missing,The missing number was thirty-one — sixty-four minus thirty-one is thirty-three!
+sub10,98,54,1,missing,Fifty-four! Ninety-eight minus fifty-four equals forty-four!
+sub11,75,42,1,missing,Forty-two fills the gap — thirty-three remains!
+sub12,83,21,1,missing,Twenty-one! Eighty-three minus twenty-one is sixty-two!
+sub13,59,37,1,missing,Thirty-seven! Fifty-nine minus thirty-seven equals twenty-two!
+sub14,46,15,1,missing,Fifteen fills the gap — forty-six minus fifteen is thirty-one!
+sub15,77,33,1,missing,Thirty-three! Seventy-seven minus thirty-three equals forty-four!
+sub16,42,15,2,diff,Borrow the ten — forty-two minus fifteen equals twenty-seven!
+sub17,53,18,2,diff,Fifty-three minus eighteen — borrow! — equals thirty-five!
+sub18,61,24,2,diff,Sixty-one minus twenty-four is thirty-seven!
+sub19,74,37,2,diff,Seventy-four minus thirty-seven equals thirty-seven!
+sub20,82,45,2,diff,Eighty-two minus forty-five is thirty-seven!
+sub21,93,56,2,diff,Ninety-three minus fifty-six equals thirty-seven!
+sub22,51,27,2,diff,Fifty-one minus twenty-seven — borrow the ten! — is twenty-four!
+sub23,64,38,2,diff,Sixty-four minus thirty-eight equals twenty-six!
+sub24,71,43,2,diff,Seventy-one minus forty-three is twenty-eight!
+sub25,85,57,2,diff,Eighty-five minus fifty-seven equals twenty-eight!
+sub26,92,35,2,diff,Ninety-two minus thirty-five — borrow the ten! — fifty-seven!
+sub27,63,27,2,diff,Sixty-three minus twenty-seven equals thirty-six!
+sub28,76,48,2,diff,Seventy-six minus forty-eight — borrow! — is twenty-eight!
+sub29,84,56,2,diff,Eighty-four minus fifty-six equals twenty-eight!
+sub30,97,69,2,diff,Ninety-seven minus sixty-nine — borrow twice! — is twenty-eight!
+sub31,42,17,2,missing,Seventeen fills the gap — forty-two minus seventeen is twenty-five!
+sub32,53,26,2,missing,Twenty-six! Fifty-three minus twenty-six equals twenty-seven!
+sub33,71,34,2,missing,Thirty-four! Seventy-one minus thirty-four is thirty-seven!
+sub34,82,47,2,missing,Forty-seven fills the gap — eighty-two minus forty-seven is thirty-five!
+sub35,65,38,2,missing,Thirty-eight! Sixty-five minus thirty-eight equals twenty-seven!
+sub36,120,45,3,diff,One hundred and twenty minus forty-five equals seventy-five!
+sub37,134,67,3,diff,One hundred and thirty-four minus sixty-seven equals sixty-seven!
+sub38,150,83,3,diff,One hundred and fifty minus eighty-three is sixty-seven!
+sub39,112,48,3,diff,One hundred and twelve minus forty-eight equals sixty-four!
+sub40,143,76,3,diff,One hundred and forty-three minus seventy-six equals sixty-seven!
+sub41,125,58,3,diff,One hundred and twenty-five minus fifty-eight is sixty-seven!
+sub42,161,94,3,diff,One hundred and sixty-one minus ninety-four equals sixty-seven!
+sub43,120,67,3,missing,Sixty-seven fills the gap — one hundred and twenty minus sixty-seven is fifty-three!
+sub44,145,78,3,missing,Seventy-eight! One hundred and forty-five minus seventy-eight is sixty-seven!
+sub45,132,65,3,missing,Sixty-five! One hundred and thirty-two minus sixty-five equals sixty-seven!
+sub46,110,43,3,diff,One hundred and ten minus forty-three equals sixty-seven!
+sub47,123,56,3,diff,One hundred and twenty-three minus fifty-six is sixty-seven!
+sub48,151,84,3,missing,Eighty-four fills the gap — sixty-seven remains!
+sub49,140,73,3,missing,Seventy-three! One hundred and forty minus seventy-three is sixty-seven!
+sub50,162,95,3,missing,Ninety-five fills the gap — one hundred and sixty-two minus ninety-five equals sixty-seven!

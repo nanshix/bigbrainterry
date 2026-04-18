@@ -1,0 +1,103 @@
+/* Generic game — neutral slate theme */
+/* Used for any game that has no custom JS launcher */
+
+:root {
+  --gen-ink:        #1a1f2e;
+  --gen-accent:     #3a4a6a;
+  --gen-paper:      #f2f4f8;
+  --gen-paper-mid:  #e6eaf2;
+  --gen-paper-edge: #d8dde8;
+  --gen-text:       #1a1f2e;
+  --gen-text-muted: #4a5472;
+}
+
+[data-game="generic"] .map-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 45%,
+    rgba(50, 65, 110, 0.14) 0%,
+    rgba(25, 35, 65, 0.08) 60%,
+    transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-game="generic"] .scroll-body {
+  background:
+    url('../assets/noise.svg'),
+    radial-gradient(ellipse at 20% 15%, rgba(50,65,110,0.09) 0%, transparent 45%),
+    radial-gradient(ellipse at 80% 85%, rgba(25,35,65,0.07) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 50%, var(--gen-paper) 0%, var(--gen-paper-mid) 60%, var(--gen-paper-edge) 100%);
+  border-color: var(--gen-accent);
+}
+
+[data-game="generic"] .scroll-body::before {
+  background: linear-gradient(180deg,
+    #5a6a8a 0%, #3a4a6a 30%, #5a6a8a 55%, #3a4a6a 80%, #242e4a 100%);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.5), inset 0 3px 6px rgba(120,140,200,0.2);
+}
+[data-game="generic"] .scroll-body::after {
+  background: linear-gradient(0deg,
+    #5a6a8a 0%, #3a4a6a 30%, #5a6a8a 55%, #3a4a6a 80%, #242e4a 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 -3px 6px rgba(120,140,200,0.2);
+}
+
+[data-game="generic"] .scroll-body { gap: 0; }
+
+[data-game="generic"] .game-split-left {
+  border-right-color: rgba(50,65,110,0.2);
+}
+
+/* Large emoji icon in left panel */
+.gen-split-icon {
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  line-height: 1;
+  filter: drop-shadow(0 3px 8px rgba(25,35,65,0.28));
+}
+
+/* Question area */
+.gen-q-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.8rem;
+  border-bottom: 1px solid rgba(50,65,110,0.15);
+}
+
+[data-game="generic"] .q-label {
+  color: var(--gen-text-muted);
+  letter-spacing: 0.05em;
+}
+
+.gen-question {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(1.6rem, 4vw, 3.2rem);
+  font-weight: 800;
+  color: var(--gen-text);
+  text-align: center;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-shadow: 0 2px 12px rgba(50,65,110,0.15), 0 1px 0 rgba(200,210,240,0.6);
+}
+
+[data-game="generic"] .choice-name {
+  font-size: clamp(1.3rem, 3vw, 2.4rem);
+  color: var(--gen-text);
+  text-shadow: 0 1px 0 rgba(200,210,240,0.5), 0 2px 8px rgba(25,35,65,0.1);
+}
+
+[data-game="generic"] .name-choice:hover:not(:disabled) {
+  background: rgba(50,65,110,0.07);
+}
+
+[data-game="generic"] .choice-badge {
+  background: var(--gen-accent);
+}
+
+[data-game="generic"] .name-choice.correct .choice-name { color: #005a1e !important; }
+[data-game="generic"] .name-choice.wrong   .choice-name { color: #8b0000 !important; }

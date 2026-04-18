@@ -1,0 +1,51 @@
+id,a,b,difficulty,type,reveal
+add01,11,12,1,sum,Eleven plus twelve — twenty-three!
+add02,13,14,1,sum,Thirteen and fourteen make twenty-seven!
+add03,21,13,1,sum,Twenty-one plus thirteen equals thirty-four!
+add04,22,25,1,sum,Twenty-two plus twenty-five is forty-seven!
+add05,31,24,1,sum,Thirty-one and twenty-four? Fifty-five!
+add06,14,23,1,sum,Fourteen plus twenty-three equals thirty-seven!
+add07,41,12,1,sum,Forty-one plus twelve is fifty-three!
+add08,33,12,1,sum,Thirty-three and twelve make forty-five!
+add09,32,14,1,missing,Thirty-two plus fourteen — forty-six!
+add10,40,12,1,missing,Forty plus twelve equals fifty-two!
+add11,23,11,1,missing,Twenty-three plus eleven is thirty-four!
+add12,11,34,1,missing,Eleven plus thirty-four equals forty-five!
+add13,20,13,1,missing,Twenty plus thirteen — thirty-three!
+add14,12,32,1,missing,Twelve plus thirty-two equals forty-four!
+add15,21,14,1,missing,Twenty-one plus fourteen is thirty-five!
+add16,15,17,2,sum,Carry the one — fifteen plus seventeen is thirty-two!
+add17,18,13,2,sum,Eighteen plus thirteen equals thirty-one!
+add18,27,14,2,sum,Twenty-seven and fourteen make forty-one!
+add19,19,12,2,sum,Nineteen plus twelve — thirty-one!
+add20,16,25,2,sum,Sixteen plus twenty-five equals forty-one!
+add21,23,18,2,sum,Twenty-three plus eighteen is forty-one!
+add22,35,16,2,sum,Carry the one! Thirty-five plus sixteen equals fifty-one!
+add23,47,13,2,sum,Forty-seven plus thirteen — sixty exactly!
+add24,38,15,2,sum,Thirty-eight and fifteen make fifty-three!
+add25,46,18,2,sum,Forty-six plus eighteen equals sixty-four!
+add26,27,37,2,sum,Twenty-seven and thirty-seven — sixty-four!
+add27,36,29,2,sum,Thirty-six plus twenty-nine is sixty-five!
+add28,57,18,2,sum,Fifty-seven plus eighteen equals seventy-five!
+add29,45,27,2,sum,Forty-five plus twenty-seven — seventy-two!
+add30,17,44,2,sum,Seventeen plus forty-four equals sixty-one!
+add31,28,13,2,missing,The missing number was thirteen — forty-one total!
+add32,17,15,2,missing,Fifteen! Seventeen plus fifteen equals thirty-two!
+add33,29,14,2,missing,Fourteen fills the gap — forty-three total!
+add34,19,23,2,missing,Twenty-three! Nineteen plus twenty-three is forty-two!
+add35,48,25,2,missing,Twenty-five! Carry the one — seventy-three total!
+add36,39,23,2,missing,Twenty-three fills the gap — sixty-two total!
+add37,26,35,2,missing,Thirty-five! Twenty-six plus thirty-five equals sixty-one!
+add38,49,13,2,missing,Thirteen! Forty-nine plus thirteen is sixty-two!
+add39,24,48,2,missing,Forty-eight! Twenty-four plus forty-eight is seventy-two!
+add40,38,27,2,missing,Twenty-seven fills the gap — sixty-five total!
+add41,55,56,3,sum,Fifty-five plus fifty-six — that's one hundred and eleven!
+add42,67,44,3,sum,Sixty-seven plus forty-four equals one hundred and eleven!
+add43,78,33,3,sum,Seventy-eight and thirty-three — one hundred and eleven!
+add44,89,12,3,sum,Eighty-nine plus twelve is one hundred and one!
+add45,73,38,3,sum,Seventy-three plus thirty-eight — one hundred and eleven!
+add46,85,27,3,sum,Eighty-five plus twenty-seven equals one hundred and twelve!
+add47,54,58,3,sum,Fifty-four and fifty-eight — one hundred and twelve!
+add48,66,47,3,missing,Forty-seven fills the gap — one hundred and thirteen total!
+add49,94,17,3,missing,Seventeen! Ninety-four plus seventeen is one hundred and eleven!
+add50,72,49,3,missing,Forty-nine! Seventy-two plus forty-nine equals one hundred and twenty-one!
