@@ -1,12 +1,12 @@
 import { shuffle, parseCSV, flagUrl } from '../utils.js';
 import { playTick, playUrgent, playReveal, playCorrect } from '../core/audio.js';
 import { speak } from '../core/speech.js';
-import { highlightCountry } from './flags.js';
+import { highlightCountry, flyFlagToMap } from './flags.js';
 import { loadGameConfig } from '../core/config.js';
 import {
   REVEAL_TIME,
   startGame, addScore, addNoAnswer, advanceGame,
-  startTimer, stopTimer, speakThenAdvance, getQuestionTime,
+  startTimer, stopTimer, gameTimeout, speakThenAdvance, getQuestionTime,
   getIdx, getRound, getScore,
 } from '../core/engine.js';
 
@@ -218,7 +218,12 @@ function doReveal(selectedIdx) {
     else if (i === selectedIdx) btn.classList.add('wrong');
   });
 
-  if (correct) highlightCountry(q.code);
+  if (correct) gameTimeout(() => highlightCountry(q.code), 300);
+
+  const flagSrc = q.dir === 'ct'
+    ? document.querySelector('.cap-split-flag')
+    : document.querySelector('.name-choice.correct .cap-cc-flag');
+  gameTimeout(() => flyFlagToMap(q, flagSrc), 350);
 
   speakThenAdvance(revealText, revealOpts, REVEAL_TIME, advanceGame);
 }

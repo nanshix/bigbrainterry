@@ -64,6 +64,10 @@
 /* ===== SPLIT LAYOUT — CITIES ===== */
 [data-game="cities"] .scroll-body { gap: 0; }
 
+[data-game="cities"] .game-split-right {
+  overflow: hidden;
+}
+
 [data-game="cities"] .game-split-left {
   border-right-color: rgba(26,58,92,0.2);
 }
@@ -115,6 +119,63 @@
 @keyframes city-ping {
   0%   { transform: scale(1);  opacity: 0.9; }
   100% { transform: scale(9);  opacity: 0;   }
+}
+
+/* ===== LANDMARK IMAGE (full-height, image is the clue) ===== */
+.cities-img-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.6rem 0.3rem;
+  border-bottom: 1px solid rgba(26,58,92,0.2);
+}
+
+/* ===== CONTEXT IMAGE + TEXT (image is flavour, text is the clue) ===== */
+.cities-img-text-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.5rem 0;
+  border-bottom: 1px solid rgba(26,58,92,0.2);
+  flex: 1;
+  min-height: 0;
+}
+
+/* Landmark: image fills the panel, is the visual clue */
+[data-game="cities"] .city-img {
+  max-height: 100%;
+  max-width: 90%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.50), 0 0 0 2px rgba(36,113,163,0.35);
+  display: block;
+  animation: city-img-appear 0.42s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+}
+
+/* Context: small image above the text question */
+[data-game="cities"] .city-ctx-img {
+  width: 100%;
+  height: clamp(90px, 16vh, 160px);
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.40);
+  display: block;
+  flex-shrink: 0;
+  animation: city-img-appear 0.42s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+}
+
+[data-game="cities"] .cities-img-text-wrap .q-header {
+  padding: 0;
+}
+
+@keyframes city-img-appear {
+  from { opacity: 0; transform: scale(0.94); }
+  to   { opacity: 1; transform: scale(1);    }
 }
 
 /* ===== MILESTONE SCREEN ===== */

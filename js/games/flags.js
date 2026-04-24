@@ -188,7 +188,7 @@ function doReveal(selectedIdx) {
 }
 
 // ===== FLY FLAG TO MAP =====
-function flyFlagToMap(country) {
+export function flyFlagToMap(country, srcOverride = null) {
   const modal = document.getElementById('quiz-frame');
   if (!modal) return;
   const coords = getCountryCoords(country.code);
@@ -196,7 +196,8 @@ function flyFlagToMap(country) {
 
   const modalRect = modal.getBoundingClientRect();
 
-  const srcEl = document.querySelector('.flag-choice.correct .choice-flag')
+  const srcEl = srcOverride
+             || document.querySelector('.flag-choice.correct .choice-flag')
              || document.querySelector('.mystery-flag')
              || document.querySelector('.scroll-body');
   if (!srcEl) return;

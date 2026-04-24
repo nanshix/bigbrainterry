@@ -8,7 +8,7 @@ export function shuffle(arr) {
 }
 
 export function flagUrl(code) {
-  return `https://flagcdn.com/w320/${code.toLowerCase()}.png`;
+  return `assets/flags/${code.toLowerCase()}.png`;
 }
 
 // Minimal CSV parser: skips comment lines (#), handles quoted fields

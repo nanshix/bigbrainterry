@@ -5,7 +5,7 @@ import { loadGameConfig } from '../core/config.js';
 import {
   REVEAL_TIME,
   startGame, addScore, addNoAnswer, advanceGame,
-  startTimer, stopTimer, speakThenAdvance, getQuestionTime,
+  startTimer, stopTimer, gameTimeout, speakThenAdvance, getQuestionTime,
   getIdx, getRound, getScore,
 } from '../core/engine.js';
 
@@ -91,6 +91,7 @@ async function loadQuestions() {
     cx:       Number(r.cx),
     cy:       Number(r.cy),
     type:     r.type,
+    image:    r.image || '',
   }));
 }
 
@@ -140,6 +141,52 @@ function highlightCity(cx, cy) {
   setTimeout(() => { if (g.parentNode) g.remove(); }, 2200);
 }
 
+const PIN_SVG = `<svg viewBox="0 0 24 36" width="28" height="42" xmlns="http://www.w3.org/2000/svg">
+  <path d="M12 0C7.6 0 4 3.6 4 8c0 6 8 18 8 18s8-12 8-18c0-4.4-3.6-8-8-8z" fill="#e53935"/>
+  <circle cx="12" cy="8" r="3.5" fill="white" opacity="0.9"/>
+</svg>`;
+
+// ===== FLY PIN TO MAP =====
+function flyPinToMap(cx, cy) {
+  const modal = document.getElementById('quiz-frame');
+  if (!modal) return;
+
+  const modalRect = modal.getBoundingClientRect();
+  const srcEl = document.querySelector('.scroll-body');
+  if (!srcEl) return;
+
+  const srcRect = srcEl.getBoundingClientRect();
+  const srcX = srcRect.left - modalRect.left + srcRect.width  / 2;
+  const srcY = srcRect.top  - modalRect.top  + srcRect.height / 2;
+
+  const dstX = (cx / 1000) * modalRect.width;
+  const dstY = (cy / 562)  * modalRect.height;
+
+  const dist = Math.hypot(dstX - srcX, dstY - srcY);
+  const arcH = Math.min(dist * 0.45, modalRect.height * 0.35);
+  const midX = (srcX + dstX) / 2;
+  const midY = Math.min(srcY, dstY) - arcH;
+
+  const scrollWrap = document.querySelector('.scroll-wrap');
+  if (scrollWrap) scrollWrap.classList.add('scroll-fly-out');
+
+  const el = document.createElement('div');
+  el.style.cssText = `position:absolute;left:0;top:0;pointer-events:none;z-index:50;
+    transform:translate(${srcX}px,${srcY}px) translate(-50%,-50%);`;
+  el.innerHTML = PIN_SVG;
+  modal.appendChild(el);
+
+  el.animate([
+    { transform: `translate(${srcX}px,${srcY}px) translate(-50%,-50%) scale(1.3)`,   opacity: 0.95 },
+    { transform: `translate(${midX}px,${midY}px) translate(-50%,-50%) scale(1.0)`,   opacity: 1, offset: 0.45 },
+    { transform: `translate(${dstX}px,${dstY}px) translate(-50%,-100%) scale(0.75)`, opacity: 0.9 },
+  ], { duration: 1100, easing: 'cubic-bezier(0.4,0,0.2,1)', fill: 'forwards' })
+    .onfinish = () => {
+      el.animate([{ opacity: 0.9 }, { opacity: 0 }], { duration: 500, delay: 800, fill: 'forwards' })
+        .onfinish = () => el.remove();
+    };
+}
+
 // ===== SHOW QUESTION =====
 function showQuestion() {
   const q      = getRound()[getIdx()];
@@ -161,6 +208,18 @@ function showQuestion() {
       </button>`).join('')}
   </div>`;
 
+  const questionPanel = q.type === 'landmark'
+    ? `<div class="cities-img-wrap">
+         <img src="assets/cities/${q.image}.jpg" class="city-img" alt="City landmark" />
+       </div>`
+    : `<div class="cities-img-text-wrap">
+         <img src="assets/cities/${q.image}.jpg" class="city-ctx-img" alt="City" />
+         <div class="q-header">
+           <div class="q-label">Name the city</div>
+           <div class="q-country-name">${q.question}</div>
+         </div>
+       </div>`;
+
   quizStage.innerHTML = `
     <div class="game-screen">
       <div class="game-bg"></div>
@@ -181,10 +240,7 @@ function showQuestion() {
               <div class="game-split-label">World Cities</div>
             </div>
             <div class="game-split-right">
-              <div class="q-header">
-                <div class="q-label">Name the city</div>
-                <div class="q-country-name">${q.question}</div>
-              </div>
+              ${questionPanel}
               ${choicesHtml}
             </div>
           </div>
@@ -198,6 +254,10 @@ function showQuestion() {
       doReveal(Number(btn.dataset.idx));
     });
   });
+
+  // Preload next landmark image while player answers this one
+  const nextQ = getRound()[getIdx() + 1];
+  if (nextQ?.image) { const _img = new Image(); _img.src = `assets/cities/${nextQ.image}.jpg`; }
 
   speak(ttsClean(q.question), { rate: 1.0 });
   startTimer(
@@ -235,6 +295,7 @@ function doReveal(selectedIdx) {
   });
 
   if (correct) highlightCity(q.cx, q.cy);
+  gameTimeout(() => flyPinToMap(q.cx, q.cy), 350);
 
   speakThenAdvance(ttsClean(revealText), revealOpts, REVEAL_TIME, advanceGame);
 }

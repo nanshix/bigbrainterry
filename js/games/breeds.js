@@ -60,7 +60,6 @@ async function loadQuestions() {
     code:       r.code,
     breed_name: r.breed_name,
     d:          Number(r.difficulty),
-    image_url:  r.image_url,
     type:       r.question_type,
     fact:       r.fact,
     reveal:     r.reveal,
@@ -140,7 +139,7 @@ function showQuestion() {
             <div class="game-split-right">
               ${q.type === 'image'
                 ? `<div class="breeds-img-wrap">
-                     <img src="${q.image_url}" class="breed-img breed-appear" alt="Dog breed" />
+                     <img src="assets/breeds/${q.code}.jpg" class="breed-img breed-appear" alt="Dog breed" />
                    </div>`
                 : `<div class="q-header">
                      <div class="q-label">Which breed is this?</div>
@@ -162,7 +161,7 @@ function showQuestion() {
 
   // Preload next question's image while player is answering this one
   const nextQ = getRound()[getIdx() + 1];
-  if (nextQ?.image_url) { const _img = new Image(); _img.src = nextQ.image_url; }
+  if (nextQ?.type === 'image') { const _img = new Image(); _img.src = `assets/breeds/${nextQ.code}.jpg`; }
 
   const spoken = q.type === 'image'
     ? 'What breed is this dog?'
