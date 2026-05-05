@@ -1,4 +1,4 @@
-import { shuffle, parseCSV } from '../utils.js';
+import { shuffle, parseCSV, injectCrack } from '../utils.js';
 import { playTick, playUrgent, playReveal, playCorrect } from '../core/audio.js';
 import { speak } from '../core/speech.js';
 import { loadGameConfig } from '../core/config.js';
@@ -343,11 +343,16 @@ function doReveal(selectedIdx) {
 
   if (correct) { addScore(); playCorrect(); } else { playReveal(); }
 
+  let wrongSeq = 0;
   document.querySelectorAll('[data-idx]').forEach(btn => {
     btn.disabled = true;
     const i = Number(btn.dataset.idx);
-    if (i === q.correctIdx)     btn.classList.add('correct');
-    else if (i === selectedIdx) btn.classList.add('wrong');
+    if (i === q.correctIdx) {
+      btn.classList.add('correct');
+    } else {
+      if (i === selectedIdx) btn.classList.add('wrong');
+      injectCrack(btn, wrongSeq++);
+    }
   });
 
   speakThenAdvance(revealText, revealOpts, REVEAL_TIME, advanceGame);

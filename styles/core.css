@@ -796,6 +796,7 @@ body {
   overflow: hidden;
 }
 .name-choice {
+  position: relative;
   display: flex; align-items: center; justify-content: center; gap: 0.5rem;
   background: transparent;
   border: none;
@@ -854,6 +855,54 @@ body {
 }
 
 .flag-choice:disabled, .name-choice:disabled { cursor: default; }
+
+/* ===== GLASS CRACK REVEAL ===== */
+.crack-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.crack-overlay svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.crack-flash-rect {
+  animation: crack-flash 0.5s ease both;
+  animation-delay: var(--cd, 0ms);
+}
+.crack-lines-g {
+  transform-origin: 42% 47%;
+  animation: crack-lines-in 0.75s ease both;
+  animation-delay: var(--cd, 0ms);
+}
+
+@keyframes crack-flash {
+  0%   { opacity: 0.82; }
+  40%  { opacity: 0.28; }
+  100% { opacity: 0; }
+}
+@keyframes crack-lines-in {
+  0%   { opacity: 0;    transform: scale(0.08); }
+  22%  { opacity: 1;    transform: scale(1.1);  }
+  45%  { opacity: 0.92; transform: scale(0.97); }
+  72%  { opacity: 0.88; transform: scale(1);    }
+  100% { opacity: 0;    transform: scale(1);    }
+}
+
+.crack-shatter {
+  animation: crack-shatter-out 0.5s ease forwards !important;
+}
+@keyframes crack-shatter-out {
+  0%   { opacity: 1;    transform: scale(1);    filter: grayscale(0); }
+  25%  { opacity: 0.85; transform: scale(1.03); filter: grayscale(0.6); }
+  60%  { opacity: 0.55; transform: scale(0.92); filter: grayscale(1); }
+  100% { opacity: 0;    transform: scale(0.75); filter: grayscale(1); }
+}
 
 /* ===== MOBILE PORTRAIT ===== */
 @media (orientation: portrait) and (max-width: 768px) {

@@ -4,6 +4,10 @@ crusade,Crusade History,⚔️,false,Medieval history — 50 questions,crusade.c
 capitals,World Capitals,👑,false,Name the capital cities of the world,capitals.csv
 cities,World Cities,🌆,false,Name famous cities from landmarks and history,cities.csv
 breeds,Dog Breeds,🐕,false,Identify dog breeds from photos and facts,breeds.csv
+basketball,Basketball Stars,🏀,false,Name the NBA legend from their photo,
+nba,NBA Teams,🏆,false,Identify all 30 NBA team logos,
+afl,AFL Teams,🏉,false,Identify all 18 AFL team logos,
+soccer,Soccer Stars,⚽,false,Name the world's top soccer players from their photo,
 times,Times Table,✖️,false,Master the multiplication tables — 2 to 12,times.csv
 addition,Addition,➕,false,2-digit addition — no carrying to triple digits,addition.csv
 subtraction,Subtraction,➖,false,2-digit subtraction — borrowing included,subtraction.csv

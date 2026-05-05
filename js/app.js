@@ -6,6 +6,10 @@ import { launch as launchCrusade } from './games/crusade.js';
 import { launch as launchCapitals } from './games/capitals.js';
 import { launch as launchCities } from './games/cities.js';
 import { launch as launchBreeds } from './games/breeds.js';
+import { launch as launchBasketball } from './games/basketball.js';
+import { launch as launchNba }        from './games/nba.js';
+import { launch as launchAfl }        from './games/afl.js';
+import { launch as launchSoccer }     from './games/soccer.js';
 import { launch as launchTimes }      from './games/times.js';
 import { launch as launchAddition }   from './games/addition.js';
 import { launch as launchSubtraction } from './games/subtraction.js';
@@ -33,7 +37,11 @@ const LAUNCHERS = {
   crusade:  launchCrusade,
   capitals: launchCapitals,
   cities:   launchCities,
-  breeds:   launchBreeds,
+  breeds:      launchBreeds,
+  basketball:  launchBasketball,
+  nba:         launchNba,
+  afl:         launchAfl,
+  soccer:      launchSoccer,
   times:       launchTimes,
   addition:    launchAddition,
   subtraction: launchSubtraction,

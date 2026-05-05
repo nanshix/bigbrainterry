@@ -265,8 +265,9 @@
 }
 @keyframes correct-zoom {
   0%   { transform: scale(1); }
-  50%  { transform: scale(1.12); }
-  100% { transform: scale(1.06); }
+  35%  { transform: scale(1.55) rotate(3deg); }
+  58%  { transform: scale(1.38) rotate(-1deg); }
+  100% { transform: scale(1.42); }
 }
 
 .choice-flag {
@@ -281,7 +282,7 @@
 
 /* Reveal states for bare flags */
 [data-game="flags"] .flag-choice.correct {
-  box-shadow: 0 0 0 3px var(--gs-correct), 0 6px 20px rgba(0,0,0,0.45) !important;
+  box-shadow: 0 0 0 4px var(--gs-correct), 0 8px 35px rgba(0,230,100,0.55) !important;
 }
 [data-game="flags"] .flag-choice.wrong {
   opacity: 0.38;

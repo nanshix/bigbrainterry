@@ -1,4 +1,4 @@
-import { shuffle, flagUrl, parseCSV } from '../utils.js';
+import { shuffle, flagUrl, parseCSV, injectCrack } from '../utils.js';
 import { playTick, playUrgent, playReveal, playCorrect } from '../core/audio.js';
 import { speak } from '../core/speech.js';
 import { loadGameConfig } from '../core/config.js';
@@ -164,6 +164,7 @@ function doReveal(selectedIdx) {
   if (correct) playCorrect(); else playReveal();
 
   const btns = document.querySelectorAll('[data-idx]');
+  let wrongSeq = 0;
   btns.forEach(btn => {
     btn.disabled = true;
     const i = Number(btn.dataset.idx);
@@ -172,12 +173,13 @@ function doReveal(selectedIdx) {
     if (i === q.correctIdx) {
       btn.classList.add('correct');
       if (q.type === 'country-to-flag') btn.classList.add('correct-keep');
-    } else if (i === selectedIdx) {
-      btn.classList.add('wrong');
+    } else {
+      if (i === selectedIdx) btn.classList.add('wrong');
+      injectCrack(btn, wrongSeq++);
     }
 
     if (q.type === 'country-to-flag' && i !== q.correctIdx) {
-      gameTimeout(() => btn.classList.add(`throw-out-${throwDir || 'tl'}`), 220);
+      gameTimeout(() => btn.classList.add(`throw-out-${throwDir || 'tl'}`), 500);
     }
   });
 
